@@ -66,7 +66,7 @@ watch(selectedWay, () => {
                             placeholder="Количество аккаунтов"
                         />
                     </div>
-                    <div class="register__item" v-if="registerStore.fields.reg_around_the_clock === true">
+                    <div class="register__item" v-if="registerStore.fields.reg_around_the_clock === false">
                         <span class="register__text">Время регистрации</span>
                         <Slider v-model="registerStore.fields.reg_time_range" :min="0" :max="24" :range="true" />
                     </div>
