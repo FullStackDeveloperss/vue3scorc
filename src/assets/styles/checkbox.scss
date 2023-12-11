@@ -34,13 +34,14 @@
 }
 
 .p-checkbox .p-checkbox-box.p-highlight {
-	background: #0067d5;
+	background-color: #0067d5;
 	width: 16px;
 	height: 16px;
 	border-radius: 3px;
 	border: 1.5px solid #0067d5;
 	box-shadow: none;
 	background-image: url("/icons/check.svg");
+	background-position: center center;
 	display: flex;
 	align-items: center;
 	justify-content: center;
