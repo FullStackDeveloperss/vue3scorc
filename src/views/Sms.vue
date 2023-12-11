@@ -363,6 +363,7 @@ watch(selectedCountry, async () => {
                                 root: { class: 'country__root' },
                                 trigger: { class: 'country__trigger' },
                                 panel: { class: 'country__panel' },
+                                wrapper: { class: 'country__wrapper', style: 'max-height: 300px; overflow: auto;' },
                                 item: { class: 'country__item' },
                                 input: { class: 'country__input' },
                             }"
