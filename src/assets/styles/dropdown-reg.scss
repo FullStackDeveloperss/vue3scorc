@@ -21,6 +21,11 @@
 		}
 	}
 
+	&__wrapper {
+		overflow: auto;
+		max-height: 220px;
+	}
+
 	&__trigger {
 		display: flex;
 		align-items: center;

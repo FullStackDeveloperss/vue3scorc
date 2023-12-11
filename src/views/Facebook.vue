@@ -54,6 +54,7 @@ watch(
                                 :pt="{
                                     root: { class: 'reg__root' },
                                     trigger: { class: 'reg__trigger' },
+                                    wrapper: { class: 'reg__wrapper', style: 'max-height: 220px;' },
                                     panel: { class: 'reg__panel' },
                                     item: { class: 'reg__item' },
                                     input: { class: 'reg__input' },
