@@ -1,0 +1,36 @@
+.p-inputswitch-slider {
+	padding: 10px 8px;
+	width: 48px;
+	height: 24px;
+	background-color: #bfc5cd;
+	border-radius: 60px;
+	box-shadow: none;
+}
+
+.dark .p-inputswitch-slider {
+	background-color: #1b395b;
+}
+
+.p-inputswitch-slider:before {
+	top: 65%;
+}
+
+.p-inputswitch .p-inputswitch-slider:before {
+	width: 12px;
+	height: 12px;
+	left: 8px;
+	background-color: #fff;
+	filter: drop-shadow(0px 6px 32px rgba(0, 0, 0, 0.05));
+}
+
+.dark .p-inputswitch .p-inputswitch-slider:before {
+	background-color: #778da6;
+}
+
+.p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
+	background-color: #0067d5;
+}
+
+.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+	background-color: #0067d5;
+}

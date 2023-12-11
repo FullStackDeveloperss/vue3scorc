@@ -1,0 +1,23 @@
+.router-link-exact-active {
+	color: #0067d5;
+	border-radius: 30px;
+	background-color: rgba(0, 103, 213, 0.1);
+}
+
+.router-link-exact-active .sidebar__icon path {
+	fill: rgba(#0067d5, 0.2);
+	stroke: #0067d5;
+}
+
+.router-link-exact-active .navbar__icon path {
+	stroke: #0067d5;
+}
+
+.dark .router-link-exact-active .sidebar__icon path {
+	fill: rgba(#0067d5, 0.2);
+	stroke: #0067d5;
+}
+
+.dark .router-link-exact-active .navbar__icon path {
+	stroke: #0067d5;
+}

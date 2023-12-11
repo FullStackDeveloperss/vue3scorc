@@ -1,0 +1,89 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Jost:wght@700&family=Manrope:wght@400;500;600;700&display=swap");
+
+@import "./dropdown-nav";
+@import "./dropdown-date";
+@import "./dropdown-profile";
+@import "./dropdown-reg";
+@import "./dropdown-sort";
+@import "./dropdown-status";
+@import "./dropdown-geo";
+@import "./dropdown-new";
+@import "./dropdown-now";
+@import "./dropdown-server";
+@import "./dropdown-checkpoint";
+@import "./dropdown-way";
+@import "./dropdown-country";
+@import "./dropdown-captcha";
+@import "./router-link";
+@import "./tab";
+@import "./canvas";
+@import "./accordion";
+@import "./checkbox";
+@import "./switch";
+@import "./prime-icon";
+@import "./common";
+@import "./slider";
+@import "./radio";
+@import "./paginator.scss";
+
+
+* {
+	padding: 0px;
+	margin: 0px;
+	border: none;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+ul,
+li {
+	list-style: none;
+}
+
+img {
+	display: block;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+button {
+	background-color: transparent;
+	border: none;
+	outline: none;
+	cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	margin: 0;
+}
+
+html {
+	scroll-behavior: smooth;
+	height: 100%;
+}
+
+body {
+	font-family: "Manrope", sans-serif;
+	font-weight: 400;
+	font-size: 15px;
+	line-height: 22px;
+	letter-spacing: 0.2px;
+	background-color: #f5f6f8;
+	color: #3c5a7b;
+	min-height: 100%;
+}
+
+.dark body {
+	background-color: #122a45;
+	color: #fff;
+}

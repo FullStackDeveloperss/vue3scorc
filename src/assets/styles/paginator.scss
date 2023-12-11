@@ -1,0 +1,24 @@
+.paginator {
+    &__root {
+        background-color: #fff;
+        border-radius: 15px;
+        .p-icon {
+            display: block !important;
+        }
+        .p-highlight {
+            color: #000 !important;
+        }
+    }
+}
+
+.dark .paginator {
+    &__root {
+        background-color: #091c31;
+        .p-link:hover {
+            color: #aaa !important;
+        }
+        .p-highlight {
+            color: #fff !important;
+        }
+    }
+}

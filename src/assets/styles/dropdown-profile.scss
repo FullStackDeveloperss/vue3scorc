@@ -1,0 +1,82 @@
+.profile {
+	&__root {
+		height: 44px;
+		border-radius: 8px;
+		border: 1px solid #bfc5cd;
+		background-color: transparent;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 16px;
+		cursor: pointer;
+	}
+
+	&__trigger {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-image: url("/icons/arrow-down-date.svg");
+		width: 20px;
+		height: 20px;
+	}
+
+	&__panel {
+		border-radius: 10px;
+		margin-top: 4px;
+		background-color: #fff;
+		box-shadow: 0px 6px 32px 0px rgba(0, 0, 0, 0.05);
+	}
+
+	&__item {
+		display: flex;
+		align-items: center;
+		height: 44px;
+		padding: 0 12px;
+		color: #091c31;
+		font-size: 13px;
+		line-height: 20px;
+		letter-spacing: 0.22px;
+		cursor: pointer;
+
+		&:hover {
+			background-color: #eee;
+			border-radius: 6px;
+		}
+	}
+
+	&__input {
+		border: none;
+		outline: none;
+		color: #091c31;
+		font-size: 13px;
+		line-height: 20px;
+		letter-spacing: 0.22px;
+	}
+}
+
+.dark .profile {
+	&__root {
+		border: 1px solid #3c5a7b;
+	}
+
+	&__panel {
+		background-color: #122a45;
+		box-shadow: none;
+	}
+
+	&__trigger {
+		background-image: url("/icons/arrow-down-date-dark.svg");
+	}
+
+	&__input {
+		color: #eee;
+	}
+
+	&__item {
+		color: #eee;
+
+		&:hover {
+			background-color: #1b395b;
+		}
+	}
+}

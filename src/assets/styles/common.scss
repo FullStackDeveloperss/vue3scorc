@@ -1,0 +1,20 @@
+.title {
+	font-size: 27px;
+	font-weight: 600;
+	line-height: 40px;
+	letter-spacing: -0.01px;
+	color: #091c31;
+}
+
+.dark .title {
+	color: #fff;
+}
+
+.dark .sidebar__icon path {
+	fill: #1b395b;
+	stroke: #778da6;
+}
+
+.dark .facebook__arrow path {
+	stroke: #fff;
+}
