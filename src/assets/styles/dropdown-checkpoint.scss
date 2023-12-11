@@ -38,6 +38,11 @@
 		letter-spacing: 0.22px;
 		cursor: pointer;
 
+		&[aria-selected="true"] {
+			background: #16c050;
+			border-radius: 6px;
+		}
+
 		&:hover {
 			background-color: #eee;
 			border-radius: 6px;

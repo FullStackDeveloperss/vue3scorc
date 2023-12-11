@@ -4,7 +4,7 @@ import InputText from '@/components/ui/InputText.vue'
 import Dropdown from 'primevue/dropdown'
 import InputSwitch from 'primevue/inputswitch'
 import Slider from 'primevue/slider'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import axios from 'axios'
 import { reactive, onBeforeMount } from 'vue'
 import { startWatch, setFields } from '@/helpers'
@@ -47,7 +47,18 @@ const fields: Fields = reactive({
     virtual_sms: '',
 })
 
-const selectedCountry = ref<[{ country: string; code: string }]>([{ country: 'Россия', code: '0' }])
+// const selectedCountry = ref<[{ country: string; code: string}] | []>([])
+const selectedCountry = computed({
+    get() {
+        return fields.phone_country_code.map(item => {
+            return countries.find( country => country.code === item)
+        });
+    },
+    set(val) {
+        fields.phone_country_code = val.map(item => item?.code);
+    }
+})
+
 const countries = [
     { country: 'Россия', code: '0' },
     { country: 'Украина', code: '1' },
@@ -223,9 +234,9 @@ const countries = [
     { country: 'Западная Сахара', code: '192' },
 ]
 
+
 watch(selectedCountry, async () => {
-    const code: string = selectedCountry.value.code
-    const codes: string[] = [code]
+    const codes: string[] = selectedCountry.value.map(item => item.code)
     fields.phone_country_code = codes
 })
 </script>
