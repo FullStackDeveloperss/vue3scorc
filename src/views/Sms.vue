@@ -255,102 +255,6 @@ watch(selectedCountry, async () => {
                     <InputSwitch v-model="fields.generate_phone" />
                     <span class="sms__text">Генерировать телефон</span>
                 </div>
-                <InputText
-                    v-model:input="fields.smska_net"
-                    type="text"
-                    placeholder="smska.net"
-                    v-if="fields.take_phone_by_ip === true"
-                />
-                <InputText
-                    v-model:input="fields.sms_reg"
-                    type="text"
-                    placeholder="smsreg"
-                    v-if="fields.take_phone_by_ip === true"
-                />
-                <InputText
-                    v-model:input="fields.simsms_org"
-                    type="text"
-                    placeholder="simsms.org"
-                    v-if="fields.take_phone_by_ip === true"
-                />
-                <InputText
-                    v-model:input="fields.get_sms_online"
-                    type="text"
-                    placeholder="GetSmsOnline"
-                    v-if="fields.take_phone_by_ip === true"
-                />
-                <InputText
-                    v-model:input="fields.give_sms"
-                    type="text"
-                    placeholder="GiveSms"
-                    v-if="fields.take_phone_by_ip === true"
-                />
-                <InputText
-                    v-model:input="fields.virtual_sms"
-                    type="text"
-                    placeholder="VirtualSms"
-                    v-if="fields.take_phone_by_ip === true"
-                />
-                <InputText
-                    v-model:input="fields.five_sim_sms"
-                    type="text"
-                    placeholder="FiveSimSms"
-                    v-if="fields.take_phone_by_ip === true"
-                />
-                <InputText
-                    v-model:input="fields.sms_actiwator"
-                    type="text"
-                    placeholder="SmsActiwator"
-                    v-if="fields.take_phone_by_ip === true"
-                />
-                <InputText
-                    v-model:input="fields.sms_activate"
-                    type="text"
-                    placeholder="SmsActivate"
-                    v-if="fields.take_phone_by_ip === true"
-                />
-                <InputText
-                    v-model:input="fields.text_now"
-                    type="text"
-                    placeholder="TextNow"
-                    v-if="fields.take_phone_by_ip === true"
-                />
-                <InputText
-                    v-model:input="fields.text_now_developer"
-                    type="text"
-                    placeholder="TextNowDeveloper"
-                    v-if="fields.take_phone_by_ip === true"
-                />
-                <InputText
-                    v-model:input="fields.sms_hub"
-                    type="text"
-                    placeholder="SmsHub"
-                    v-if="fields.take_phone_by_ip === true"
-                />
-                <InputText
-                    v-model:input="fields.vak_sms_com"
-                    type="text"
-                    placeholder="vak-sms.vom"
-                    v-if="fields.take_phone_by_ip === true"
-                />
-                <InputText
-                    v-model:input="fields.activation_pw"
-                    type="text"
-                    placeholder="Activation PW"
-                    v-if="fields.take_phone_by_ip === true"
-                />
-                <InputText
-                    v-model:input="fields.grizzly_sms"
-                    type="text"
-                    placeholder="Grizzly SMS"
-                    v-if="fields.take_phone_by_ip === true"
-                />
-                <InputText
-                    v-model:input="fields.dropsmsbot"
-                    type="text"
-                    placeholder="@dropsmsbot"
-                    v-if="fields.take_phone_by_ip === true"
-                />
                 <div class="sms__item">
                     <div class="sms__dropdown">
                         <span class="sms__text-span">Страна:</span>
@@ -358,7 +262,7 @@ watch(selectedCountry, async () => {
                             v-model="selectedCountry"
                             :options="countries"
                             optionLabel="country"
-                            placeholder="Россия"
+                            placeholder="Не выбрана"
                             :maxSelectedLabels="3"
                             unstyled
                             :pt="{
@@ -372,6 +276,88 @@ watch(selectedCountry, async () => {
 
                     </div>
                 </div>
+            </div>
+            <div class="sms__inner" v-if="selectedCountry?.length">
+                <InputText
+                    v-model:input="fields.smska_net"
+                    type="text"
+                    placeholder="smska.net"
+                />
+                <InputText
+                    v-model:input="fields.sms_reg"
+                    type="text"
+                    placeholder="smsreg"
+                />
+                <InputText
+                    v-model:input="fields.simsms_org"
+                    type="text"
+                    placeholder="simsms.org"
+                />
+                <InputText
+                    v-model:input="fields.get_sms_online"
+                    type="text"
+                    placeholder="GetSmsOnline"
+                />
+                <InputText
+                    v-model:input="fields.give_sms"
+                    type="text"
+                    placeholder="GiveSms"
+                />
+                <InputText
+                    v-model:input="fields.virtual_sms"
+                    type="text"
+                    placeholder="VirtualSms"
+                />
+                <InputText
+                    v-model:input="fields.five_sim_sms"
+                    type="text"
+                    placeholder="FiveSimSms"
+                />
+                <InputText
+                    v-model:input="fields.sms_actiwator"
+                    type="text"
+                    placeholder="SmsActiwator"
+                />
+                <InputText
+                    v-model:input="fields.sms_activate"
+                    type="text"
+                    placeholder="SmsActivate"
+                />
+                <InputText
+                    v-model:input="fields.text_now"
+                    type="text"
+                    placeholder="TextNow"
+                />
+                <InputText
+                    v-model:input="fields.text_now_developer"
+                    type="text"
+                    placeholder="TextNowDeveloper"
+                />
+                <InputText
+                    v-model:input="fields.sms_hub"
+                    type="text"
+                    placeholder="SmsHub"
+                />
+                <InputText
+                    v-model:input="fields.vak_sms_com"
+                    type="text"
+                    placeholder="vak-sms.vom"
+                />
+                <InputText
+                    v-model:input="fields.activation_pw"
+                    type="text"
+                    placeholder="Activation PW"
+                />
+                <InputText
+                    v-model:input="fields.grizzly_sms"
+                    type="text"
+                    placeholder="Grizzly SMS"
+                />
+                <InputText
+                    v-model:input="fields.dropsmsbot"
+                    type="text"
+                    placeholder="@dropsmsbot"
+                />
             </div>
         </div>
     </AppLayout>
@@ -398,6 +384,10 @@ watch(selectedCountry, async () => {
 
         @media only screen and (max-width: 743px) and (min-width: 320px) {
             gap: 20px;
+        }
+
+        & + & {
+            margin-top: 24px;
         }
     }
 

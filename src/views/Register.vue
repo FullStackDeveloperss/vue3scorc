@@ -47,9 +47,12 @@ watch(selectedWay, () => {
 
 <template>
     <AppLayout>
-        <div class="register">
-            <h2 class="register__title title">Регистрация</h2>
-            <div class="register__wrapper">
+        <div class="register" >
+            <div class="register__row">
+                <h2 class="register__title title">Регистрация</h2>
+                <InputSwitch v-model="registerStore.fields.reger_status" />
+            </div>
+            <div class="register__wrapper" :class="{'register__wrapper--off': !registerStore.fields.reger_status}">
                 <div class="register__inner">
                     <div class="register__item">
                         <span class="register__text">Отлежка</span>
@@ -126,7 +129,14 @@ watch(selectedWay, () => {
 
 <style lang="scss" scoped>
 .register {
-    &__title {
+    position: relative;
+
+
+
+    &__row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         margin-bottom: 24px;
 
         @media only screen and (max-width: 743px) and (min-width: 320px) {
@@ -141,6 +151,12 @@ watch(selectedWay, () => {
 
         @media only screen and (max-width: 743px) and (min-width: 320px) {
             gap: 20px;
+        }
+
+        &--off {
+            opacity: .5;
+            pointer-events: none;
+            user-select: none;
         }
     }
 

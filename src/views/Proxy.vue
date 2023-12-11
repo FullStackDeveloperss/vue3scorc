@@ -24,7 +24,9 @@ const fields: Fields = reactive({
 </script>
 
 <template>
-    <AppLayout> </AppLayout>
+    <AppLayout>
+
+    </AppLayout>
 </template>
 
 <style lang="scss" scoped></style>
