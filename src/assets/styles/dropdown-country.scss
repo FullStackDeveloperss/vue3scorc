@@ -52,6 +52,11 @@
             background-color: #eee;
             border-radius: 6px;
         }
+
+        &[aria-selected="true"] {
+            background: #16c050;
+            border-radius: 6px;
+        }
     }
 
     &__input {

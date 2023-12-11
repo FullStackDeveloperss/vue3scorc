@@ -9,6 +9,8 @@ import axios from 'axios'
 import { reactive, onBeforeMount } from 'vue'
 import { startWatch, setFields } from '@/helpers'
 import type { Fields } from '@/types/sms'
+import MultiSelect from 'primevue/multiselect';
+
 
 onBeforeMount(async () => {
     try {
@@ -45,7 +47,7 @@ const fields: Fields = reactive({
     virtual_sms: '',
 })
 
-const selectedCountry = ref<{ country: string; code: string }>({ country: 'Россия', code: '0' })
+const selectedCountry = ref<[{ country: string; code: string }]>([{ country: 'Россия', code: '0' }])
 const countries = [
     { country: 'Россия', code: '0' },
     { country: 'Украина', code: '1' },
@@ -352,12 +354,12 @@ watch(selectedCountry, async () => {
                 <div class="sms__item">
                     <div class="sms__dropdown">
                         <span class="sms__text-span">Страна:</span>
-                        <Dropdown
+                        <MultiSelect
                             v-model="selectedCountry"
-                            icon="none"
                             :options="countries"
                             optionLabel="country"
                             placeholder="Россия"
+                            :maxSelectedLabels="3"
                             unstyled
                             :pt="{
                                 root: { class: 'country__root' },
@@ -366,8 +368,8 @@ watch(selectedCountry, async () => {
                                 wrapper: { class: 'country__wrapper', style: 'max-height: 300px; overflow: auto;' },
                                 item: { class: 'country__item' },
                                 input: { class: 'country__input' },
-                            }"
-                        />
+                            }" />
+
                     </div>
                 </div>
             </div>
