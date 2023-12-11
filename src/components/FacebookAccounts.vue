@@ -290,6 +290,10 @@ const all = ref<boolean>(false)
         text-align: start;
         padding: 0 17px 17px 0;
         border-bottom: 1px solid #eee;
+
+        &:last-child {
+            text-align: center;
+        }
     }
 
     &__table-td {

@@ -61,7 +61,7 @@ const logi = ref('')
 						</div>
 					</div>
 				</div>
-				<div class="facebook__add-import">
+<!--				<div class="facebook__add-import">
 					<span class="facebook__add-text facebook__add-text_add">Импорт аккаунтов из логов</span>
 					<div class="facebook__add-content">
 						<InputText v-model:input="logi" type="text" class="facebook__add-input" alt="Логи" src="/icons/paperclip.svg"
@@ -73,7 +73,7 @@ const logi = ref('')
 							<span>Импортировать</span>
 						</button>
 					</div>
-				</div>
+				</div>-->
 				<div class="facebook__add-status">
 					<span class="facebook__add-text facebook__add-text_add">Изменить статус</span>
 					<div class="facebook__add-down">
