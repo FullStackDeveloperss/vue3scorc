@@ -9,7 +9,10 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-const isDark = useDark()
+const isDark = useDark({
+    valueDark: 'dark',
+    valueLight: 'light',
+})
 
 const userStore = useUserStore()
 

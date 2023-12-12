@@ -69,7 +69,8 @@ const data = ref<LinkItem[]>([])
 
     &__num {
         height: 24px;
-        width: 32px;
+        min-width: 32px;
+        padding: 0 5px;
         border-radius: 12px;
         background-color: #e0281b;
         display: flex;

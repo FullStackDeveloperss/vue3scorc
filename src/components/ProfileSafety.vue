@@ -1,21 +1,37 @@
 <script setup lang="ts">
 import ButtonMain from '@/components/ui/ButtonMain.vue'
 import InputText from '@/components/ui/InputText.vue'
+import Password from 'primevue/password'
 import { useDark, useWindowSize } from '@vueuse/core'
 import { ref } from 'vue'
+import axios from 'axios'
 
-const isDark = useDark()
+const isDark = useDark({
+    valueDark: 'dark',
+    valueLight: 'light',
+})
 
 const { width } = useWindowSize()
 
 const safety = ref({
 	password: '',
-	confirmPassword: '',
+    password_confirmation: ''
 })
+
+const sendingData = ref(false)
+const saveNewPassword = async () => {
+    sendingData.value = true
+    try {
+        const res = await axios.post('profile/set-password', safety.value)
+    } catch (error) {
+        console.log(error)
+    }
+    sendingData.value = false
+}
 </script>
 
 <template>
-	<form class="profile__form">
+	<form @submit.prevent="saveNewPassword" class="profile__form">
 		<h3 class="profile__form-title">Безопасность</h3>
 		<div class="profile__form-inner" v-if="width > 743">
 			<div class="profile__form-item">
@@ -28,12 +44,12 @@ const safety = ref({
 						src="/icons/password.svg" pic="/icons/eye.svg" alt="Пароль" v-if="!isDark" />
 					<InputText v-model:input="safety.password" type="text" placeholder="sfaslfklaskf34234re"
 						src="/icons/password-dark.svg" pic="/icons/eye-dark.svg" alt="Пароль" v-else />
-					<InputText v-model:input="safety.confirmPassword" type="password" placeholder="•••••••••••••••••••••"
+					<InputText v-model:input="safety.password_confirmation" type="password" placeholder="•••••••••••••••••••••"
 						src="/icons/password.svg" pic="/icons/eye-off.svg" alt="Пароль" v-if="!isDark" />
-					<InputText v-model:input="safety.confirmPassword" type="password" placeholder="•••••••••••••••••••••"
+					<InputText v-model:input="safety.password_confirmation" type="password" placeholder="•••••••••••••••••••••"
 						src="/icons/password-dark.svg" pic="/icons/eye-off-dark.svg" alt="Пароль" v-else />
 				</fieldset>
-				<ButtonMain text="Сохранить" />
+				<ButtonMain :loading="sendingData" text="Сохранить" />
 			</div>
 		</div>
 		<div class="profile__form-info" v-else>
@@ -47,12 +63,12 @@ const safety = ref({
 				</div>
 				<div class="profile__form-label">
 					<span class="profile__form-text">Подтверждение пароля</span>
-					<InputText v-model:input="safety.confirmPassword" type="password" placeholder="•••••••••••••••••••••"
+					<InputText v-model:input="safety.password_confirmation" type="password" placeholder="•••••••••••••••••••••"
 						src="/icons/password.svg" pic="/icons/eye-off.svg" alt="Пароль" v-if="!isDark" />
-					<InputText v-model:input="safety.confirmPassword" type="password" placeholder="•••••••••••••••••••••"
+					<InputText v-model:input="safety.password_confirmation" type="password" placeholder="•••••••••••••••••••••"
 						src="/icons/password-dark.svg" pic="/icons/eye-off-dark.svg" alt="Пароль" v-else />
 				</div>
-				<ButtonMain text="Сохранить" />
+				<ButtonMain :loading="sendingData" text="Сохранить" />
 			</fieldset>
 		</div>
 	</form>

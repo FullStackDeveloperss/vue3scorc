@@ -84,9 +84,7 @@ const checkpoint = ref([
     ],
 )
 
-watch(selectedCheckpoint, () => {
-    fields.get_statuses = [...selectedCheckpoint.value.map(item => item?.value)]
-})
+
 </script>
 
 <template>

@@ -21,8 +21,8 @@ const data = ref<LinkItem[]>([])
         <div class="data">
             <h2 class="data__title title">Данные</h2>
             <div class="data__wrapper">
-                <RouterLink v-for="item of data" :key="item.id" :to="'/data/posts/' + item.url" class="data__inner">
-                    <span class="data__text">Ссылки на посты</span>
+                <RouterLink v-for="item of data" :key="item.id" :to="'/data/links/' + item.url" class="data__inner">
+                    <span class="data__text">{{ item.name }}</span>
                     <span class="data__num">{{ item.total }}</span>
                 </RouterLink>
             </div>
@@ -69,7 +69,8 @@ const data = ref<LinkItem[]>([])
 
     &__num {
         height: 24px;
-        width: 32px;
+        min-width: 32px;
+        padding: 0 5px;
         border-radius: 12px;
         background-color: #e0281b;
         display: flex;

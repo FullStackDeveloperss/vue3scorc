@@ -112,7 +112,7 @@ const router = createRouter({
 			component: () => import('@/views/Data/Personal.vue'),
 		},
 		{
-			path: '/data/posts/:id',
+			path: '/data/links/:id',
 			name: 'posts',
 			component: () => import('@/views/Data/Posts.vue'),
 		},

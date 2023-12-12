@@ -14,7 +14,11 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const userStore = useUserStore()
 
-const isDark = useDark()
+const isDark = useDark({
+    valueDark: 'dark',
+    valueLight: 'light',
+})
+
 const toggleDark = useToggle(isDark)
 
 const rootStore = useRootStore()
@@ -33,7 +37,7 @@ const logout = (): void => {
 
 <template>
 	<div class="navbar" :class="{ 'navbar__close': isCloseSidebar }">
-		<button @click="toggleDark()">Dark</button>
+		<button @click="toggleDark()">{{ isDark ? "Light" : "Dark" }}</button>
 		<button class="navbar__btn" @click="isCloseSidebar = !isCloseSidebar">
 			<Menu class="navbar__img" />
 		</button>

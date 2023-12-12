@@ -8,7 +8,10 @@ import AccordionTab from 'primevue/accordiontab'
 import Dropdown from 'primevue/dropdown'
 import { ref } from 'vue'
 
-const isDark = useDark()
+const isDark = useDark({
+    valueDark: 'dark',
+    valueLight: 'light',
+})
 
 const selectedStatus = ref<string>('')
 const status = ref([

@@ -234,11 +234,6 @@ const countries = [
     { country: 'Западная Сахара', code: '192' },
 ]
 
-
-watch(selectedCountry, async () => {
-    const codes: string[] = selectedCountry.value.map(item => item.code)
-    fields.phone_country_code = codes
-})
 </script>
 
 <template>

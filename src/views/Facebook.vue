@@ -14,7 +14,10 @@ import { onMounted, ref, watch } from 'vue'
 const facebookStore = useFacebookStore()
 const { facebookData, selectedRegister, sortRegister, selectedSort, sortSort, page } = storeToRefs(facebookStore)
 
-const isDark = useDark()
+const isDark = useDark({
+    valueDark: 'dark',
+    valueLight: 'light',
+})
 
 const { width } = useWindowSize()
 
@@ -39,7 +42,7 @@ watch(
 <template>
     <AppLayout>
         <div class="facebook">
-            <h2 class="facebook__title title">Аккаунты (38 573)</h2>
+            <h2 class="facebook__title title">Аккаунты ({{ facebookData?.total }})</h2>
             <div class="facebook__nav" v-if="width > 429">
                 <div class="facebook__nav-left">
                     <div class="facebook__nav-register">

@@ -2,20 +2,46 @@
 import ButtonMain from '@/components/ui/ButtonMain.vue'
 import InputText from '@/components/ui/InputText.vue'
 import { useDark, useWindowSize } from '@vueuse/core'
-import { ref } from 'vue'
+import { onBeforeMount, reactive, ref } from 'vue'
+import axios from 'axios'
+import { setFields } from '@/helpers'
 
-const isDark = useDark()
+const isDark = useDark({
+    valueDark: 'dark',
+    valueLight: 'light',
+})
 
 const { width } = useWindowSize()
 
 const dataLogin = ref({
-	login: '',
+	name: '',
 	email: '',
 })
+
+onBeforeMount(async () => {
+    try {
+        const res = await axios.post('profile/get')
+        dataLogin.value = res.data
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+const sendingData = ref(false)
+const saveProfileSettings = async () => {
+    sendingData.value = true
+    try {
+        const res = await axios.post('profile/set', dataLogin.value)
+    } catch (error) {
+        console.log(error)
+    }
+    sendingData.value = false
+}
+
 </script>
 
 <template>
-	<form class="profile__form">
+	<form @submit.prevent="saveProfileSettings" class="profile__form">
 		<h3 class="profile__form-title">Данные для входа</h3>
 		<div class="profile__form-inner" v-if="width > 743">
 			<div class="profile__form-item">
@@ -24,25 +50,25 @@ const dataLogin = ref({
 			</div>
 			<div class="profile__form-info">
 				<fieldset class="profile__form-fieldset">
-					<InputText v-model:input="dataLogin.login" type="text" placeholder="alexeyafonin" src="/icons/user.svg"
+					<InputText v-model:input="dataLogin.name" type="text" placeholder="alexeyafonin" src="/icons/user.svg"
 						alt="Логин" v-if="!isDark" />
-					<InputText v-model:input="dataLogin.login" type="text" placeholder="alexeyafonin" src="/icons/user-dark.svg"
+					<InputText v-model:input="dataLogin.name" type="text" placeholder="alexeyafonin" src="/icons/user-dark.svg"
 						alt="Логин" v-else />
 					<InputText v-model:input="dataLogin.email" type="text" placeholder="afonin.design@gmail.com"
 						src="/icons/email.svg" alt="Email" v-if="!isDark" />
 					<InputText v-model:input="dataLogin.email" type="text" placeholder="afonin.design@gmail.com"
 						src="/icons/email-dark.svg" alt="Email" v-else />
 				</fieldset>
-				<ButtonMain text="Сохранить" />
+				<ButtonMain :loading="sendingData" text="Сохранить" />
 			</div>
 		</div>
 		<div class="profile__form-info" v-else>
 			<fieldset class="profile__form-fieldset">
 				<div class="profile__form-label">
 					<span class="profile__form-text">Логин</span>
-					<InputText v-model:input="dataLogin.login" type="text" placeholder="alexeyafonin" src="/icons/user.svg"
+					<InputText v-model:input="dataLogin.name" type="text" placeholder="alexeyafonin" src="/icons/user.svg"
 						alt="Логин" v-if="!isDark" />
-					<InputText v-model:input="dataLogin.login" type="text" placeholder="alexeyafonin" src="/icons/user-dark.svg"
+					<InputText v-model:input="dataLogin.name" type="text" placeholder="alexeyafonin" src="/icons/user-dark.svg"
 						alt="Логин" v-else />
 				</div>
 				<div class="profile__form-label">

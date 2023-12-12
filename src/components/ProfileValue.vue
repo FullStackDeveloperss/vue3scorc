@@ -6,7 +6,10 @@ import { ref } from 'vue'
 
 const { width } = useWindowSize()
 
-const isDark = useDark()
+const isDark = useDark({
+    valueDark: 'dark',
+    valueLight: 'light',
+})
 
 const profile = ref({
 	login: '',

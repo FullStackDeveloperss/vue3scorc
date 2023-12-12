@@ -1,9 +1,12 @@
 <script setup lang="ts">
-defineProps<{ text: string }>()
+defineProps({
+    text: String,
+    loading: Boolean
+})
 </script>
 
 <template>
-	<button class="btn">
+	<button class="btn" :class="{loading}">
 		{{ text }}
 	</button>
 </template>
@@ -29,7 +32,7 @@ defineProps<{ text: string }>()
 		background-color: #1B395B;
 	}
 
-	&:focus {
+	&:active {
 		color: #0067D5;
 		background-color: rgba(22, 101, 255, 0.10);
 	}
@@ -37,6 +40,11 @@ defineProps<{ text: string }>()
 	&:disabled {
 		background-color: #eee;
 	}
+
+    &.loading {
+        pointer-events: none;
+        opacity: .3;
+    }
 }
 
 .dark .btn {

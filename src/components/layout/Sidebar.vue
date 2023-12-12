@@ -3,7 +3,7 @@ import Alerts from '@/components/icons/Alerts.vue'
 import Autofill from '@/components/icons/Autofill.vue'
 import ChatGPT from '@/components/icons/ChatGPT.vue'
 import Checkpoint from '@/components/icons/Checkpoint.vue'
-import Dashboard from '@/components/icons/Dashboard.vue'
+import IconDashboard from '@/components/icons/Dashboard.vue'
 import Data from '@/components/icons/Data.vue'
 import Facebook from '@/components/icons/Facebook.vue'
 import Farm from '@/components/icons/Farm.vue'
@@ -20,8 +20,31 @@ import ZRD from '@/components/icons/ZRD.vue'
 import { useRootStore } from '@/stores/root'
 import { useDark } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
+import { onMounted, ref } from 'vue'
+import { useFacebookStore } from '@/stores/facebook'
+import type { Date } from '@/types/general'
+import axios from 'axios'
+import type { Dashboard } from "@/types/dashboard";
 
-const isDark = useDark()
+const isDark = useDark({
+    valueDark: 'dark',
+    valueLight: 'light',
+})
+
+const dashboard = ref<Dashboard | null>(null);
+
+const getDashboardInfo = async () => {
+    try {
+        const res = await axios.post("stats/info");
+        dashboard.value = res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+onMounted(() => {
+    getDashboardInfo()
+})
 
 const rootStore = useRootStore()
 const { isCloseSidebar } = storeToRefs(rootStore)
@@ -41,7 +64,7 @@ const { isCloseSidebar } = storeToRefs(rootStore)
 			<ul class="sidebar__main-list sidebar__list">
 				<li class="sidebar__main-item sidebar__item">
 					<RouterLink to="/" class="sidebar__main-link sidebar__link">
-						<Dashboard class="sidebar__main-icon sidebar__icon" />
+						<IconDashboard class="sidebar__main-icon sidebar__icon" />
 						<span class="sidebar__main-text sidebar__text">Дашборд</span>
 					</RouterLink>
 				</li>
@@ -53,8 +76,10 @@ const { isCloseSidebar } = storeToRefs(rootStore)
 						</div>
 						<div class="sidebar__main-item">
 							<div class="sidebar__main-nums">
-								<span class="sidebar__main-num sidebar__main-num_red">1056</span>
-								<span class="sidebar__main-num sidebar__main-num_green">3434</span>
+								<span class="sidebar__main-num sidebar__main-num_red">
+                                    {{ dashboard ? dashboard?.total_profiles - dashboard?.valid : 0 }}
+                                </span>
+								<span class="sidebar__main-num sidebar__main-num_green">{{ dashboard?.valid || 0 }}</span>
 							</div>
 						</div>
 					</RouterLink>
