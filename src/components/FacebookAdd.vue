@@ -327,6 +327,9 @@ const logi = ref('')
 			width: 100%;
 		}
 	}
+    &__arrow {
+        color: #000;
+    }
 }
 
 .dark .facebook {

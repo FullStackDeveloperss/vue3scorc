@@ -10,6 +10,8 @@ import { storeToRefs } from 'pinia'
 import Dropdown from 'primevue/dropdown'
 import Paginator from 'primevue/paginator'
 import { onMounted, ref, watch } from 'vue'
+import debounce from 'lodash.debounce'
+import axios from 'axios'
 
 const facebookStore = useFacebookStore()
 const { facebookData, selectedRegister, sortRegister, selectedSort, sortSort, page } = storeToRefs(facebookStore)
@@ -33,9 +35,9 @@ function changePage(e: any) {
 
 watch(
     () => facebookStore.sortOrder,
-    async () => {
+    debounce(async (val: any) => {
         await facebookStore.getFacebookDataBySort()
-    },
+    }, 500 )
 )
 </script>
 

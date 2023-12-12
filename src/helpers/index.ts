@@ -1,9 +1,11 @@
 import { watch } from 'vue'
 import axios from 'axios'
+import debounce from 'lodash.debounce'
 
 interface NumbersNames {
     [key: string]: string
 }
+
 
 export function startWatch(fields: { [key: string]: string }, code: string) {
     let index: string
@@ -11,13 +13,13 @@ export function startWatch(fields: { [key: string]: string }, code: string) {
         const fieldItem = index.toString()
         watch(
             () => fields[fieldItem],
-            async (val) => {
+            debounce(async (val: any) => {
                 try {
                     await axios.post('setting/set', { code: code, key: fieldItem, value: val })
                 } catch (error) {
                     console.log(error)
                 }
-            },
+            }, 500 ),
             { deep: true },
         )
     }

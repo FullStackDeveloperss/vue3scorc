@@ -219,6 +219,18 @@ const { isCloseSidebar } = storeToRefs(rootStore)
 	transition: all .3s ease-in-out;
 	z-index: 10;
 
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: #fff;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #a8a8a8;
+    }
+
 	@media only screen and (max-width: 1279px) and (min-width: 1024px) {
 		padding: 16px;
 	}

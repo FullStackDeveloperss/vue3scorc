@@ -195,6 +195,10 @@ const { filterBy } = storeToRefs(facebookStore)
 			}
 		}
 	}
+
+    &__arrow {
+        color: #000;
+    }
 }
 
 .dark .facebook {

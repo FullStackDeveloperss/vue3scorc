@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import AppLayout from '@/components/layout/AppLayout.vue'
 import axios from 'axios'
-import { reactive, onBeforeMount, ref } from 'vue'
-import { startWatch, setFields } from '@/helpers'
+import { onBeforeMount, reactive, ref } from 'vue'
+import { setFields, startWatch } from '@/helpers'
 import type { Fields } from '@/types/proxy'
 import Paginator from 'primevue/paginator'
 import Slider from 'primevue/slider'
+import ArrowDown from '@/components/icons/ArrowDown.vue'
+import ButtonIcon from '@/components/ui/ButtonIcon.vue'
 
 const proxyList = reactive({
     current_page: 1,
@@ -14,15 +16,15 @@ const proxyList = reactive({
     total: 39,
     total_valid: 37,
     total_invalid: 2,
-    sort: "created_at",
-    sort_order: "desc",
+    sort: 'created_at',
+    sort_order: 'desc',
     data: [
         {
             id: '',
             proxy: '',
-            valid: ''
-        }
-    ]
+            valid: '',
+        },
+    ],
 })
 const fields: Fields = reactive({
     proxy_accounts_count: 1,
@@ -46,19 +48,57 @@ const changePage = () => {
 
 }
 
+const openedProxyWarning = ref(false)
 </script>
 
 <template>
     <AppLayout>
-        <h2 class="title reg-links__title">Прокси
-            (<span class="valid">{{ proxyList.total_valid }}</span>
-            |
-            <span class="invalid">{{ proxyList.total_invalid }}</span>)
-        </h2>
+        <div class="section__header">
+            <h2 class="title reg-links__title">Прокси
+                (<span class="valid">{{ proxyList.total_valid }}</span>
+                |
+                <span class="invalid">{{ proxyList.total_invalid }}</span>)
+            </h2>
+            <div class="section__header-panel">
+                <ButtonIcon
+                    :border="isDark ? '1px solid #3C5A7B' : '1px solid #BFC5CD'"
+                    backgroundColor="transparent"
+                    :src="idDark ? '/icons/arrow-up-dark.svg' : '/icons/arrow-up.svg'"
+                    alt="Вверх"
+                />
+                <ButtonIcon
+                    :border="isDark ? '1px solid #3C5A7B' : '1px solid #BFC5CD'"
+                    backgroundColor="transparent"
+                    :src="idDark ? '/icons/arrow-down-sort-dark.svg' : '/icons/arrow-down-sort.svg'"
+                    alt="Вверх"
+                />
+            </div>
+        </div>
 
+        <div class="proxy-import">
+            <div class="proxy-import__top"
+                 :class="{ 'proxy-import__top--opened': openedProxyWarning }"
+                 @click="openedProxyWarning = !openedProxyWarning">
+                Импрот прокси
+                <ArrowDown class="proxy-import__arrow" />
+            </div>
+            <form class="proxy-import__main" :class="{ 'proxy-import__main--opened': openedProxyWarning }">
+                <div class="proxy-import__description">
+                    <p>Допустимые форматы прокси:</p>
+                    <p>Ссылку для реконекта указывать нельзя!</p>
+                    <p>login:pass@ip:port <br> ip:port</p>
+                    <p>
+                        Если прокси socks5 то необходимо указать протокол socks5:// <br>
+                        socks5://login:pass@ip:port <br>
+                        socks5://ip:port
+                    </p>
+                </div>
+            </form>
+        </div>
         <div class="proxy__inner">
             <div class="proxy__settings">
-                <span class="proxy__settings-label">Выключать систему если валидных прокси меньше {{ fields.proxy_max_threads }}</span>
+                <span class="proxy__settings-label">Выключать систему если валидных прокси меньше {{ fields.proxy_max_threads
+                    }}</span>
                 <Slider v-model="fields.proxy_max_threads" :min="1" :max="99" />
             </div>
         </div>
@@ -96,10 +136,20 @@ const changePage = () => {
 </template>
 
 <style lang="scss" scoped>
+
+.section__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+
+    &-panel {
+        display: flex;
+        gap: 10px;
+    }
+}
 .reg-links {
     &__title {
-        margin-bottom: 24px;
-
         .valid {
             color: #16C050;
         }
@@ -110,6 +160,45 @@ const changePage = () => {
     }
 }
 
+.proxy-import {
+    margin-bottom: 24px;
+    background: #0067d5;
+    border-radius: 24px;
+    overflow: hidden;
+
+    &__top {
+        padding: 10px 20px;
+        color: #fff;
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        &--opened .proxy-import__arrow {
+            transform: rotate(180deg);
+        }
+    }
+
+    &__main {
+        max-height: 0;
+        transition: .3s;
+        border-top: 1px solid #eee;
+
+        &--opened {
+            max-height: 500px;
+        }
+    }
+
+    &__description {
+        padding: 10px 20px 20px;
+        color: #fff;
+
+        p:not(:first-child) {
+            margin-top: 20px;
+        }
+    }
+}
 
 .proxy {
     &__inner {
@@ -121,6 +210,7 @@ const changePage = () => {
         background-color: #fff;
         box-shadow: 0px 6px 32px 0px rgba(0, 0, 0, 0.05);
     }
+
     &__table {
         margin-top: 24px;
     }
