@@ -57,11 +57,7 @@ const logi = ref('')
 								:pt="{ root: { class: 'status__root' }, trigger: { class: 'status__trigger' }, panel: { class: 'status__panel' }, item: { class: 'status__item' }, input: { class: 'status__input' } }" />
 							<span class="facebook__add-span">Статус:</span>
 						</div>
-						<div class="facebook__add-dropdown">
-							<Dropdown v-model="selectedGeo" icon="none" :options="geo" optionLabel="name" placeholder="UA" unstyled
-								:pt="{ root: { class: 'geo__root' }, trigger: { class: 'geo__trigger' }, panel: { class: 'geo__panel' }, item: { class: 'geo__item' }, input: { class: 'geo__input' } }" />
-							<span class="facebook__add-span">Гео:</span>
-						</div>
+
 					</div>
 				</div>
 <!--				<div class="facebook__add-import">

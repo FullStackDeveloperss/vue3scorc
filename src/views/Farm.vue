@@ -152,7 +152,7 @@ watch(selectedCaptcha, async () => {
                     </div>
                     <div class="farm__item" v-if="fields.worm_status === true">
                         <span class="farm__text">Потоки Warm</span>
-                        <Slider v-model="fields.worm_threads_count" :min="0" :max="100" />
+                        <Slider v-model="fields.worm_threads_count" :min="0" :max="1000" />
                     </div>
                     <div class="farm__item">
                         <span class="farm__text">Checkpoint</span>
