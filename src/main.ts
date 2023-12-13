@@ -10,6 +10,9 @@ import { createApp } from "vue";
 
 import App from "./App.vue";
 import router from "./router";
+import ToastService from 'primevue/toastservice';
+import PerfectScrollbar from 'vue3-perfect-scrollbar'
+import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URI
 
@@ -25,5 +28,13 @@ app.use(router);
 pinia.use(piniaPluginPersistedstate);
 app.use(pinia);
 app.use(PrimeVue);
+app.use(ToastService);
+app.use(PerfectScrollbar, {
+  watchOptions: true,
+  options: {
+    wheelPropagation: false,
+    scrollingThreshold: 0
+  }
+});
 
 app.mount("#app");

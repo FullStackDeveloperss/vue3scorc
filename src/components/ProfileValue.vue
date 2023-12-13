@@ -19,8 +19,7 @@ const profile = ref({
 
 <template>
 	<form class="profile__form">
-		<img class="profile__img" src="/images/profile-img.png" alt="Профиль" v-if="!isDark">
-		<img class="profile__img" src="/images/profile-img-dark.png" alt="Профиль" v-else>
+		<img class="profile__img" src="/images/keitaro.svg" alt="Профиль" width="120" height="27" >
 		<div class="profile__form-inner" v-if="width > 743">
 			<div class="profile__form-item">
 				<span class="profile__form-text">Логин</span>

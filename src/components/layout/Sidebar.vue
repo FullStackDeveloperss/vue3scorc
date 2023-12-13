@@ -52,157 +52,160 @@ const { isCloseSidebar } = storeToRefs(rootStore)
 </script>
 
 <template>
-	<div class="sidebar" :class="{ 'sidebar__close': isCloseSidebar }">
-		<div class="sidebar__logo" v-if="!isDark">
-			<img v-if="!isCloseSidebar" src="/images/logo-dashboard.png" width="228" height="46">
-			<img v-else src="/images/logo-dashboard-close.png" width="46" height="46">
-		</div>
-		<div class="sidebar__logo" v-else>
-			<img v-if="!isCloseSidebar" src="/images/logo-dashboard-dark.png" width="228" height="46">
-			<img v-else src="/images/logo-dashboard-close.png" width="46" height="46">
-		</div>
-		<nav class="sidebar__main">
-			<ul class="sidebar__main-list sidebar__list">
-				<li class="sidebar__main-item sidebar__item">
-					<RouterLink to="/" class="sidebar__main-link sidebar__link">
-						<IconDashboard class="sidebar__main-icon sidebar__icon" />
-						<span class="sidebar__main-text sidebar__text">Дашборд</span>
-					</RouterLink>
-				</li>
-				<li class="sidebar__main-item sidebar__item">
-					<RouterLink to="/facebook" class="sidebar__main-link sidebar__main-link_facebook sidebar__link">
-						<div class="sidebar__main-info">
-							<Facebook class="sidebar__main-icon sidebar__icon" />
-							<span class="sidebar__main-text sidebar__text">Facebook</span>
-						</div>
-						<div class="sidebar__main-item">
-							<div class="sidebar__main-nums">
+	<div >
+        <perfect-scrollbar class="sidebar" :class="{ 'sidebar__close': isCloseSidebar }">
+            <div class="sidebar__logo" v-if="!isDark">
+                <img v-if="!isCloseSidebar" src="/images/logo-dashboard.png" width="228" height="46">
+                <img v-else src="/images/logo-dashboard-close.png" width="46" height="46">
+            </div>
+            <div class="sidebar__logo" v-else>
+                <img v-if="!isCloseSidebar" src="/images/logo-dashboard-dark.png" width="228" height="46">
+                <img v-else src="/images/logo-dashboard-close.png" width="46" height="46">
+            </div>
+            <nav class="sidebar__main">
+                <ul class="sidebar__main-list sidebar__list">
+                    <li class="sidebar__main-item sidebar__item">
+                        <RouterLink to="/" class="sidebar__main-link sidebar__link">
+                            <IconDashboard class="sidebar__main-icon sidebar__icon" />
+                            <span class="sidebar__main-text sidebar__text">Дашборд</span>
+                        </RouterLink>
+                    </li>
+                    <li class="sidebar__main-item sidebar__item">
+                        <RouterLink to="/facebook" class="sidebar__main-link sidebar__main-link_facebook sidebar__link">
+                            <div class="sidebar__main-info">
+                                <Facebook class="sidebar__main-icon sidebar__icon" />
+                                <span class="sidebar__main-text sidebar__text">Facebook</span>
+                            </div>
+                            <div class="sidebar__main-item">
+                                <div class="sidebar__main-nums">
 								<span class="sidebar__main-num sidebar__main-num_red">
                                     {{ dashboard ? dashboard?.total_profiles - dashboard?.valid : 0 }}
                                 </span>
-								<span class="sidebar__main-num sidebar__main-num_green">{{ dashboard?.valid || 0 }}</span>
-							</div>
-						</div>
-					</RouterLink>
-				</li>
-				<li class="sidebar__main-item sidebar__item">
-					<RouterLink to="/autofill" class="sidebar__main-link sidebar__link">
-						<Autofill class="sidebar__main-icon sidebar__icon" />
-						<span class="sidebar__main-text sidebar__text">Автозалив</span>
-					</RouterLink>
-				</li>
-			</ul>
-		</nav>
-		<nav class="sidebar__work">
-			<h3 class="sidebar__work-title sidebar__title">Настройка работы</h3>
-			<div class="sidebar__work-content sidebar__content">
-				<ul class="sidebar__work-list sidebar__list">
-					<li class="sidebar__work-item sidebar__item">
-						<RouterLink to="/farm" class="sidebar__work-link sidebar__link">
-							<Farm class="sidebar__work-icon sidebar__icon" />
-							<span class="sidebar__work-text sidebar__text">Фарм</span>
-						</RouterLink>
-					</li>
-					<li class="sidebar__work-item sidebar__item">
-						<RouterLink to="/gpt" class="sidebar__work-link sidebar__link">
-							<ChatGPT class="sidebar__work-icon sidebar__icon" />
-							<span class="sidebar__work-text sidebar__text">Chat GPT</span>
-						</RouterLink>
-					</li>
-					<li class="sidebar__work-item sidebar__item">
-						<RouterLink to="/posting" class="sidebar__work-link sidebar__link">
-							<Posting class="sidebar__work-icon sidebar__icon" />
-							<span class="sidebar__work-text sidebar__text">Постинг</span>
-						</RouterLink>
-					</li>
-					<li class="sidebar__work-item sidebar__item">
-						<RouterLink to="/checkpoint" class="sidebar__work-link sidebar__link">
-							<Checkpoint class="sidebar__work-icon sidebar__icon" />
-							<span class="sidebar__work-text sidebar__text">Чекпоинт</span>
-						</RouterLink>
-					</li>
-					<li class="sidebar__work-item sidebar__item">
-						<RouterLink to="/zrd" class="sidebar__work-link sidebar__link">
-							<ZRD class="sidebar__work-icon sidebar__icon" />
-							<span class="sidebar__work-text sidebar__text">ЗРД</span>
-						</RouterLink>
-					</li>
-					<li class="sidebar__work-item sidebar__item">
-						<RouterLink to="/inviter" class="sidebar__work-link sidebar__link">
-							<Inviter class="sidebar__work-icon sidebar__icon" />
-							<span class="sidebar__work-text sidebar__text">Инвайтер</span>
-						</RouterLink>
-					</li>
-					<li class="sidebar__work-item sidebar__item">
-						<RouterLink to="/public" class="sidebar__work-link sidebar__link">
-							<InviterToPublics class="sidebar__work-icon sidebar__icon" />
-							<span class="sidebar__work-text sidebar__text">Инвайтер в паблики</span>
-						</RouterLink>
-					</li>
-					<li class="sidebar__work-item sidebar__item">
-						<RouterLink to="/messenger" class="sidebar__work-link sidebar__link">
-							<Messenger class="sidebar__work-icon sidebar__icon" />
-							<span class="sidebar__work-text sidebar__text">Мессенджер</span>
-						</RouterLink>
-					</li>
-					<li class="sidebar__work-item sidebar__item">
-						<RouterLink to="/data/links" class="sidebar__work-link sidebar__link">
-							<Data class="sidebar__work-icon sidebar__icon" />
-							<span class="sidebar__work-text sidebar__text">Данные для работы</span>
-						</RouterLink>
-					</li>
-					<li class="sidebar__work-item sidebar__item">
-						<RouterLink to="/autoserver" class="sidebar__work-link sidebar__link">
-							<ServerAutomation class="sidebar__work-icon sidebar__icon" />
-							<span class="sidebar__work-text sidebar__text">Автоматизация сервера</span>
-						</RouterLink>
-					</li>
-					<li class="sidebar__work-item sidebar__item">
-						<RouterLink to="/servers" class="sidebar__work-link sidebar__link">
-							<Servers class="sidebar__work-icon sidebar__icon" />
-							<span class="sidebar__work-text sidebar__text">Сервера</span>
-						</RouterLink>
-					</li>
-				</ul>
-			</div>
-		</nav>
-		<nav class="sidebar__register">
-			<h3 class="sidebar__register-title sidebar__title">Настройка регистрации</h3>
-			<div class="sidebar__register-content sidebar__content">
-				<ul class="sidebar__register-list sidebar__list">
-					<li class="sidebar__register-item sidebar__item">
-						<RouterLink to="/register" class="sidebar__register-link sidebar__link">
-							<Register class="sidebar__register-icon sidebar__icon" />
-							<span class="sidebar__register-text sidebar__text">Регистрация</span>
-						</RouterLink>
-					</li>
-					<li class="sidebar__register-item sidebar__item">
-						<RouterLink to="/sms" class="sidebar__register-link sidebar__link">
-							<SMSService class="sidebar__register-icon sidebar__icon" />
-							<span class="sidebar__register-text sidebar__text">SMS сервисы</span>
-						</RouterLink>
-					</li>
-					<li class="sidebar__register-item sidebar__item">
-						<RouterLink to="/alerts" class="sidebar__register-link sidebar__link">
-							<Alerts class="sidebar__register-icon sidebar__icon" />
-							<span class="sidebar__register-text sidebar__text">Оповещения</span>
-						</RouterLink>
-					</li>
-					<li class="sidebar__register-item sidebar__item">
-						<RouterLink to="/proxy" class="sidebar__register-link sidebar__link">
-							<Proxy class="sidebar__register-icon sidebar__icon" />
-							<span class="sidebar__register-text sidebar__text">Прокси</span>
-						</RouterLink>
-					</li>
-					<li class="sidebar__register-item sidebar__item">
-						<RouterLink to="/reg/links" class="sidebar__register-link sidebar__link">
-							<Data class="sidebar__register-icon sidebar__icon" />
-							<span class="sidebar__register-text sidebar__text">Данные для регистрации</span>
-						</RouterLink>
-					</li>
-				</ul>
-			</div>
-		</nav>
+                                    <span class="sidebar__main-num sidebar__main-num_green">{{ dashboard?.valid || 0 }}</span>
+                                </div>
+                            </div>
+                        </RouterLink>
+                    </li>
+                    <li class="sidebar__main-item sidebar__item">
+                        <RouterLink to="/autofill" class="sidebar__main-link sidebar__link">
+                            <Autofill class="sidebar__main-icon sidebar__icon" />
+                            <span class="sidebar__main-text sidebar__text">Автозалив</span>
+                        </RouterLink>
+                    </li>
+                </ul>
+            </nav>
+            <nav class="sidebar__work">
+                <h3 class="sidebar__work-title sidebar__title">Настройка работы</h3>
+                <div class="sidebar__work-content sidebar__content">
+                    <ul class="sidebar__work-list sidebar__list">
+                        <li class="sidebar__work-item sidebar__item">
+                            <RouterLink to="/farm" class="sidebar__work-link sidebar__link">
+                                <Farm class="sidebar__work-icon sidebar__icon" />
+                                <span class="sidebar__work-text sidebar__text">Фарм</span>
+                            </RouterLink>
+                        </li>
+                        <li class="sidebar__work-item sidebar__item">
+                            <RouterLink to="/gpt" class="sidebar__work-link sidebar__link">
+                                <ChatGPT class="sidebar__work-icon sidebar__icon" />
+                                <span class="sidebar__work-text sidebar__text">Chat GPT</span>
+                            </RouterLink>
+                        </li>
+                        <li class="sidebar__work-item sidebar__item">
+                            <RouterLink to="/posting" class="sidebar__work-link sidebar__link">
+                                <Posting class="sidebar__work-icon sidebar__icon" />
+                                <span class="sidebar__work-text sidebar__text">Постинг</span>
+                            </RouterLink>
+                        </li>
+                        <li class="sidebar__work-item sidebar__item">
+                            <RouterLink to="/checkpoint" class="sidebar__work-link sidebar__link">
+                                <Checkpoint class="sidebar__work-icon sidebar__icon" />
+                                <span class="sidebar__work-text sidebar__text">Чекпоинт</span>
+                            </RouterLink>
+                        </li>
+                        <li class="sidebar__work-item sidebar__item">
+                            <RouterLink to="/zrd" class="sidebar__work-link sidebar__link">
+                                <ZRD class="sidebar__work-icon sidebar__icon" />
+                                <span class="sidebar__work-text sidebar__text">ЗРД</span>
+                            </RouterLink>
+                        </li>
+                        <li class="sidebar__work-item sidebar__item">
+                            <RouterLink to="/inviter" class="sidebar__work-link sidebar__link">
+                                <Inviter class="sidebar__work-icon sidebar__icon" />
+                                <span class="sidebar__work-text sidebar__text">Инвайтер</span>
+                            </RouterLink>
+                        </li>
+                        <li class="sidebar__work-item sidebar__item">
+                            <RouterLink to="/public" class="sidebar__work-link sidebar__link">
+                                <InviterToPublics class="sidebar__work-icon sidebar__icon" />
+                                <span class="sidebar__work-text sidebar__text">Инвайтер в паблики</span>
+                            </RouterLink>
+                        </li>
+                        <li class="sidebar__work-item sidebar__item">
+                            <RouterLink to="/messenger" class="sidebar__work-link sidebar__link">
+                                <Messenger class="sidebar__work-icon sidebar__icon" />
+                                <span class="sidebar__work-text sidebar__text">Мессенджер</span>
+                            </RouterLink>
+                        </li>
+                        <li class="sidebar__work-item sidebar__item">
+                            <RouterLink to="/data/links" class="sidebar__work-link sidebar__link">
+                                <Data class="sidebar__work-icon sidebar__icon" />
+                                <span class="sidebar__work-text sidebar__text">Данные для работы</span>
+                            </RouterLink>
+                        </li>
+                        <li class="sidebar__work-item sidebar__item">
+                            <RouterLink to="/autoserver" class="sidebar__work-link sidebar__link">
+                                <ServerAutomation class="sidebar__work-icon sidebar__icon" />
+                                <span class="sidebar__work-text sidebar__text">Автоматизация сервера</span>
+                            </RouterLink>
+                        </li>
+                        <li class="sidebar__work-item sidebar__item">
+                            <RouterLink to="/servers" class="sidebar__work-link sidebar__link">
+                                <Servers class="sidebar__work-icon sidebar__icon" />
+                                <span class="sidebar__work-text sidebar__text">Сервера</span>
+                            </RouterLink>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <nav class="sidebar__register">
+                <h3 class="sidebar__register-title sidebar__title">Настройка регистрации</h3>
+                <div class="sidebar__register-content sidebar__content">
+                    <ul class="sidebar__register-list sidebar__list">
+                        <li class="sidebar__register-item sidebar__item">
+                            <RouterLink to="/register" class="sidebar__register-link sidebar__link">
+                                <Register class="sidebar__register-icon sidebar__icon" />
+                                <span class="sidebar__register-text sidebar__text">Регистрация</span>
+                            </RouterLink>
+                        </li>
+                        <li class="sidebar__register-item sidebar__item">
+                            <RouterLink to="/sms" class="sidebar__register-link sidebar__link">
+                                <SMSService class="sidebar__register-icon sidebar__icon" />
+                                <span class="sidebar__register-text sidebar__text">SMS сервисы</span>
+                            </RouterLink>
+                        </li>
+                        <li class="sidebar__register-item sidebar__item">
+                            <RouterLink to="/alerts" class="sidebar__register-link sidebar__link">
+                                <Alerts class="sidebar__register-icon sidebar__icon" />
+                                <span class="sidebar__register-text sidebar__text">Оповещения</span>
+                            </RouterLink>
+                        </li>
+                        <li class="sidebar__register-item sidebar__item">
+                            <RouterLink to="/proxy" class="sidebar__register-link sidebar__link">
+                                <Proxy class="sidebar__register-icon sidebar__icon" />
+                                <span class="sidebar__register-text sidebar__text">Прокси</span>
+                            </RouterLink>
+                        </li>
+                        <li class="sidebar__register-item sidebar__item">
+                            <RouterLink to="/reg/links" class="sidebar__register-link sidebar__link">
+                                <Data class="sidebar__register-icon sidebar__icon" />
+                                <span class="sidebar__register-text sidebar__text">Данные для регистрации</span>
+                            </RouterLink>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </perfect-scrollbar>
+
 	</div>
 </template>
 
@@ -219,18 +222,6 @@ const { isCloseSidebar } = storeToRefs(rootStore)
 	overflow-x: hidden;
 	transition: all .3s ease-in-out;
 	z-index: 10;
-
-    &::-webkit-scrollbar {
-        width: 5px;
-    }
-
-    &::-webkit-scrollbar-track {
-        background-color: #fff;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background-color: #a8a8a8;
-    }
 
 	@media only screen and (max-width: 1279px) and (min-width: 1024px) {
 		padding: 16px;

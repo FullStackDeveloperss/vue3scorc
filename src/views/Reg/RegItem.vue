@@ -123,4 +123,24 @@ const data: SectionData = reactive({
         }
     }
 }
+
+.dark {
+    .table {
+        &__wrapper {
+            background: #091c31;
+        }
+
+        &__cell {
+            color: #fff;
+
+            &--head {
+                color: #fff;
+            }
+        }
+
+        &__row:hover {
+            background: #122a45;
+        }
+    }
+}
 </style>

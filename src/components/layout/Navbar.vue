@@ -37,7 +37,6 @@ const logout = (): void => {
 
 <template>
 	<div class="navbar" :class="{ 'navbar__close': isCloseSidebar }">
-		<button @click="toggleDark()">{{ isDark ? "Light" : "Dark" }}</button>
 		<button class="navbar__btn" @click="isCloseSidebar = !isCloseSidebar">
 			<Menu class="navbar__img" />
 		</button>

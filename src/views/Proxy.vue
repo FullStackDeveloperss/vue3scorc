@@ -9,6 +9,13 @@ import Slider from 'primevue/slider'
 import ArrowDown from '@/components/icons/ArrowDown.vue'
 import ButtonIcon from '@/components/ui/ButtonIcon.vue'
 import InputSwitch from 'primevue/inputswitch'
+import FileUpload from 'primevue/fileupload'
+import Toast from 'primevue/toast'
+import { useToast } from 'primevue/usetoast'
+import StatusError from '@/components/icons/StatusError.vue'
+import ButtonMain from '@/components/ui/ButtonMain.vue'
+import ProgressBar from 'primevue/progressbar'
+
 
 const proxyList = reactive({
     current_page: 1,
@@ -53,7 +60,7 @@ const changePage = () => {
 
 }
 
-const openedProxyWarning = ref(false)
+const openedProxyWarning = ref(true)
 
 const downloadValid = ref(false)
 const download = async () => {
@@ -102,7 +109,7 @@ const uploadProxy = async () => {
     formData.append('file', upload.proxy_file)
 
     try {
-        await axios
+        const response = await axios
             .post('proxy/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -113,6 +120,10 @@ const uploadProxy = async () => {
                     )
                 }.bind(this),
             })
+
+        resultUpload.proxy = response.data.proxy
+        resultUpload.rows = response.data.rows
+        resultUpload.message = response.data.message
     } catch (error) {
         console.log(error)
     }
@@ -125,6 +136,31 @@ const uploadProxy = async () => {
     await getDataFromApi()
 }
 
+const file = ref()
+const toast = useToast()
+
+const resultUpload = reactive({
+    proxies: 0,
+    rows: 0,
+    message: '',
+})
+
+const onSelect = (data) => {
+    const file = data.files[0]
+    upload.proxy_format = file.type
+    upload.proxy_file = file
+}
+
+const onUpload = async (callback: any) => {
+    await uploadProxy()
+    callback()
+    toast.add({
+        severity: 'success',
+        summary: ``,
+        detail: `${resultUpload.message} <br/> Всего прокси: ${resultUpload.proxies} <br/> Всего строк: ${resultUpload.rows}`,
+    })
+
+}
 </script>
 
 <template>
@@ -164,7 +200,9 @@ const uploadProxy = async () => {
                 Импрот прокси
                 <ArrowDown class="proxy-import__arrow" />
             </div>
-            <form class="proxy-import__main" :class="{ 'proxy-import__main--opened': openedProxyWarning }">
+            <form class="proxy-import__main"
+                  :class="{ 'proxy-import__main--opened': openedProxyWarning }"
+                  @submit.prevent="">
                 <div class="proxy-import__description">
                     <p>Допустимые форматы прокси:</p>
                     <p>Ссылку для реконекта указывать нельзя!</p>
@@ -175,13 +213,66 @@ const uploadProxy = async () => {
                         socks5://ip:port
                     </p>
                 </div>
+                <div class="upload">
+                    <div class="file">
+                        {{ file }}
+                    </div>
+                    <Toast position="bottom-center">
+                        <template #message="{ message }">
+                            <div>
+                                <div v-html="message.detail"></div>
+                            </div>
+                        </template>
+                    </Toast>
+                    <FileUpload name="file"
+                                url="/api/proxy/upload"
+                                @upload="finishUpload($event)"
+                                accept=".txt"
+                                :customUpload="true"
+                                :maxFileSize="1000000"
+                                :pt="{
+                                    root: { class: 'upload__root' }
+                                }"
+                                @select="onSelect">
+                        <template #header="{ chooseCallback, uploadCallback, clearCallback, files }">
+                            <div class="proxy-upload__buttons">
+                                <ButtonIcon @click="chooseCallback()"
+                                            src="/icons/upload.svg"
+                                            alt="Загрузить"
+                                            border="none"
+                                            backgroundColor="#0067D5" />
+                                <div class="selected-file" v-if="!(!files || files.length === 0)">
+                                    <span class="selected-file__label">Файл txt с прокси</span>
+                                    <span class="selected-file__name">{{ files[0].name }}</span>
+                                </div>
+
+                                <StatusError v-show="!(!files || files.length === 0)" @click="clearCallback()" />
+                                <ButtonMain v-if="!(!files || files.length === 0)"
+                                            @click="onUpload(uploadCallback)"
+                                            text="Загрузить" />
+                            </div>
+                        </template>
+                        <template #content="{ files, progress }">
+                            <ProgressBar v-if="files.length > 0"
+                                         :value="progress"
+                                         :pt="{
+                                             root: { class: 'upload-progress' },
+                                             value: { class: 'upload-progress__value', style: { background: 'linear-gradient(to right, #10b981, #058f61)' } },
+                                             label: { class: 'upload-progress__label' }
+                                         }"
+                            />
+                        </template>
+                        <template #empty></template>
+                    </FileUpload>
+                </div>
             </form>
         </div>
 
         <div class="proxy__inner">
             <div class="proxy__settings">
-                <span class="proxy__settings-label">Выключать систему если валидных прокси меньше {{ fields.proxy_max_threads
-                    }}</span>
+                <span class="proxy__settings-label">
+                    Выключать систему если валидных прокси меньше {{ fields.proxy_max_threads }}
+                </span>
                 <Slider v-model="fields.proxy_max_threads" :min="1" :max="99" />
             </div>
         </div>
@@ -211,14 +302,34 @@ const uploadProxy = async () => {
                 :totalRecords="proxyList.total"
                 @page="changePage"
                 :pt="{
-                root: { class: 'paginator__root reg-links__paginator' },
-            }"
+                    root: { class: 'paginator__root reg-links__paginator' },
+                }"
             ></Paginator>
         </div>
     </AppLayout>
 </template>
 
 <style lang="scss" scoped>
+
+.upload {
+    padding: 10px 20px 20px;
+
+    input[type="file"] {
+        display: none;
+    }
+
+    &-progress {
+        position: relative;
+        margin-top: 24px;
+    }
+
+}
+
+
+.upload-progress {
+    height: 20px;
+}
+
 .switch-wrapper {
     display: flex;
     align-items: center;
@@ -283,6 +394,7 @@ const uploadProxy = async () => {
         &--opened {
             border-top: 1px solid #eee;
             max-height: 500px;
+            padding-bottom: 20px;
         }
     }
 
@@ -391,6 +503,36 @@ const uploadProxy = async () => {
 
         &:last-child {
             width: 120px;
+        }
+    }
+}
+
+.dark {
+    .proxy {
+        &__inner {
+            background: #091c31;
+        }
+
+        &__table {
+            background: #091c31;
+        }
+
+        &__settings-label {
+            color: #fff;
+        }
+    }
+
+    .table {
+        &__cell {
+            color: #fff;
+
+            &--head {
+                color: #fff;
+            }
+        }
+
+        &__row:hover {
+            background: #122a45;
         }
     }
 }

@@ -9,9 +9,11 @@ import { useDark, useWindowSize } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import Dropdown from 'primevue/dropdown'
 import Paginator from 'primevue/paginator'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, watch } from 'vue'
 import debounce from 'lodash.debounce'
 import axios from 'axios'
+import { useToast } from 'primevue/usetoast'
+import Toast from 'primevue/toast'
 
 const facebookStore = useFacebookStore()
 const { facebookData, selectedRegister, sortRegister, selectedSort, sortSort, page } = storeToRefs(facebookStore)
@@ -37,8 +39,59 @@ watch(
     () => facebookStore.sortOrder,
     debounce(async (val: any) => {
         await facebookStore.getFacebookDataBySort()
-    }, 500 )
+    }, 500),
 )
+
+const toast = useToast()
+const uploadFile = async (event) => {
+    console.log(event.target.files[0])
+    let formData = new FormData()
+
+    formData.append('file', event.target.files[0])
+
+    try {
+        const response = await axios.post('facebook/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+
+        console.log(123123)
+        toast.add({
+            severity: 'success',
+            summary: ``,
+            detail: response.data.message,
+        })
+
+        event.target.value = null
+    } catch (e) {
+        console.log(e)
+    }
+
+    await facebookStore.getFacebookData()
+}
+
+const downloadFile = () => {
+    let file_name = 'profiles-fb.xlsx'
+
+    const data = {}
+
+    axios
+        .post('facebook/download', data, {
+            responseType: 'blob',
+        })
+        .then((response) => {
+            var fileURL = window.URL.createObjectURL(new Blob([response.data]))
+            var fileLink = document.createElement('a')
+            fileLink.href = fileURL
+            fileLink.setAttribute('download', file_name)
+            document.body.appendChild(fileLink)
+            fileLink.click()
+        })
+        .catch(() => {
+            console.log(123)
+        })
+}
 </script>
 
 <template>
@@ -135,8 +188,12 @@ watch(
                         backgroundColor="#0067D5"
                         @click="facebookStore.setActivityAll(0)"
                     />
-                    <ButtonIcon src="/icons/download.svg" alt="Скачать" border="none" backgroundColor="#0067D5" />
-                    <ButtonIcon src="/icons/upload.svg" alt="Загрузить" border="none" backgroundColor="#0067D5" />
+                    <ButtonIcon src="/icons/download.svg" alt="Скачать" border="none" backgroundColor="#0067D5" @click="downloadFile" />
+                    <Toast />
+                    <label class="upload-btn">
+                        <img src="/icons/upload.svg" alt="">
+                        <input type='file' accept=".xlsx" hidden @change="uploadFile" />
+                    </label>
                 </div>
             </div>
             <div class="facebook__adaptive" v-if="width < 430">
@@ -340,4 +397,19 @@ watch(
         color: #eee;
     }
 }
+
+
+.upload-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    position: relative;
+    background: #0067D5;
+    cursor: pointer;
+}
+
 </style>
