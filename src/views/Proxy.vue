@@ -8,6 +8,7 @@ import Paginator from 'primevue/paginator'
 import Slider from 'primevue/slider'
 import ArrowDown from '@/components/icons/ArrowDown.vue'
 import ButtonIcon from '@/components/ui/ButtonIcon.vue'
+import InputSwitch from 'primevue/inputswitch'
 
 const proxyList = reactive({
     current_page: 1,
@@ -31,7 +32,7 @@ const fields: Fields = reactive({
     proxy_max_threads: 25,
 })
 
-onBeforeMount(async () => {
+const getDataFromApi = async () => {
     try {
         const res = await axios.post('setting/get', { code: 'proxy' })
         const list = await axios.post('data/proxy/list', { page: 1 })
@@ -40,6 +41,10 @@ onBeforeMount(async () => {
     } catch (error) {
         console.log(error)
     }
+}
+
+onBeforeMount(async () => {
+    getDataFromApi()
     startWatch(fields, 'proxy')
 })
 
@@ -49,6 +54,77 @@ const changePage = () => {
 }
 
 const openedProxyWarning = ref(false)
+
+const downloadValid = ref(false)
+const download = async () => {
+    try {
+        const response = await axios.post('data/proxy/download', {
+            valid: downloadValid ? 'valid' : 'all',
+        }, {
+            responseType: 'blob',
+        })
+
+        var fileURL = window.URL.createObjectURL(new Blob([response.data]))
+        var fileLink = document.createElement('a')
+
+        fileLink.href = fileURL
+        fileLink.setAttribute('download', 'proxies.csv')
+        document.body.appendChild(fileLink)
+
+        fileLink.click()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const removeAllProxy = async () => {
+    try {
+        await axios.post('proxy/remove-all')
+        await getDataFromApi()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+const upload = reactive({
+    proxy_format: '',
+    proxy_file: null,
+})
+
+const uploadingProgress = ref(0)
+const loadingSubmit = ref(false)
+const uploadProxy = async () => {
+    loadingSubmit.value = true
+    let formData = new FormData()
+
+    formData.append('format', upload.proxy_format)
+    formData.append('file', upload.proxy_file)
+
+    try {
+        await axios
+            .post('proxy/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                onUploadProgress: function(progressEvent: any) {
+                    uploadingProgress.value = parseInt(
+                        Math.round((progressEvent.loaded / progressEvent.total) * 100),
+                    )
+                }.bind(this),
+            })
+    } catch (error) {
+        console.log(error)
+    }
+
+    uploadingProgress.value = 0
+    loadingSubmit.value = false
+    upload.proxy_format = ''
+    upload.proxy_file = null
+
+    await getDataFromApi()
+}
+
 </script>
 
 <template>
@@ -60,17 +136,23 @@ const openedProxyWarning = ref(false)
                 <span class="invalid">{{ proxyList.total_invalid }}</span>)
             </h2>
             <div class="section__header-panel">
-                <ButtonIcon
-                    :border="isDark ? '1px solid #3C5A7B' : '1px solid #BFC5CD'"
-                    backgroundColor="transparent"
-                    :src="idDark ? '/icons/arrow-up-dark.svg' : '/icons/arrow-up.svg'"
-                    alt="Вверх"
+                <div class="switch-wrapper">
+                    <span>выгружать только валидные?</span>
+                    <InputSwitch v-model="downloadValid" />
+                </div>
+                <ButtonIcon src="/icons/download.svg"
+                            alt="Скачать"
+                            tooltip
+                            border="none"
+                            backgroundColor="#0067D5"
+                            @click="download"
                 />
-                <ButtonIcon
-                    :border="isDark ? '1px solid #3C5A7B' : '1px solid #BFC5CD'"
-                    backgroundColor="transparent"
-                    :src="idDark ? '/icons/arrow-down-sort-dark.svg' : '/icons/arrow-down-sort.svg'"
-                    alt="Вверх"
+                <ButtonIcon src="/icons/delete.svg"
+                            alt="Удалить все"
+                            tooltip
+                            border="none"
+                            backgroundColor="#E0281B"
+                            @click="removeAllProxy"
                 />
             </div>
         </div>
@@ -95,6 +177,7 @@ const openedProxyWarning = ref(false)
                 </div>
             </form>
         </div>
+
         <div class="proxy__inner">
             <div class="proxy__settings">
                 <span class="proxy__settings-label">Выключать систему если валидных прокси меньше {{ fields.proxy_max_threads
@@ -136,6 +219,17 @@ const openedProxyWarning = ref(false)
 </template>
 
 <style lang="scss" scoped>
+.switch-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    line-height: 1.2;
+
+    span {
+        max-width: 120px;
+    }
+}
 
 .section__header {
     display: flex;
@@ -148,6 +242,7 @@ const openedProxyWarning = ref(false)
         gap: 10px;
     }
 }
+
 .reg-links {
     &__title {
         .valid {
@@ -162,7 +257,7 @@ const openedProxyWarning = ref(false)
 
 .proxy-import {
     margin-bottom: 24px;
-    background: #0067d5;
+    background: #0797e1;
     border-radius: 24px;
     overflow: hidden;
 
@@ -183,9 +278,10 @@ const openedProxyWarning = ref(false)
     &__main {
         max-height: 0;
         transition: .3s;
-        border-top: 1px solid #eee;
+
 
         &--opened {
+            border-top: 1px solid #eee;
             max-height: 500px;
         }
     }

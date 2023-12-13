@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import Navbar from '@/components/layout/Navbar.vue'
-import Sidebar from '@/components/layout/Sidebar.vue'
 import { useRootStore } from '@/stores/root'
 import { storeToRefs } from 'pinia'
 
@@ -11,8 +9,6 @@ const { isCloseSidebar } = storeToRefs(rootStore)
 
 <template>
 	<div class="inner">
-		<Navbar />
-		<Sidebar />
 		<div class="wrapper" :class="{ 'wrapper__close': isCloseSidebar }">
 			<slot />
 		</div>

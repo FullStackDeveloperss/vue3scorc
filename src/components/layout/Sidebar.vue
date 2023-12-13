@@ -43,6 +43,7 @@ const getDashboardInfo = async () => {
 };
 
 onMounted(() => {
+    console.log(321)
     getDashboardInfo()
 })
 
@@ -53,12 +54,12 @@ const { isCloseSidebar } = storeToRefs(rootStore)
 <template>
 	<div class="sidebar" :class="{ 'sidebar__close': isCloseSidebar }">
 		<div class="sidebar__logo" v-if="!isDark">
-			<img v-if="!isCloseSidebar" src="/images/logo-dashboard.png">
-			<img v-else src="/images/logo-dashboard-close.png">
+			<img v-if="!isCloseSidebar" src="/images/logo-dashboard.png" width="228" height="46">
+			<img v-else src="/images/logo-dashboard-close.png" width="46" height="46">
 		</div>
 		<div class="sidebar__logo" v-else>
-			<img v-if="!isCloseSidebar" src="/images/logo-dashboard-dark.png">
-			<img v-else src="/images/logo-dashboard-close.png">
+			<img v-if="!isCloseSidebar" src="/images/logo-dashboard-dark.png" width="228" height="46">
+			<img v-else src="/images/logo-dashboard-close.png" width="46" height="46">
 		</div>
 		<nav class="sidebar__main">
 			<ul class="sidebar__main-list sidebar__list">

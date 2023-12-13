@@ -28,4 +28,16 @@
 	border: none;
 	border-radius: 50%;
 	transform: translateY(-50%);
+	position: relative;
+
+	&:after {
+		content: attr(aria-valuenow);
+		display: inline-block;
+		position: absolute;
+		bottom: 100%;
+		left: 50%;
+		transform: translateX(-50%);
+		font-size: 13px;
+		line-height: 1.2;
+	}
 }

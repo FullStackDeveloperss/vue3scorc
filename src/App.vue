@@ -1,19 +1,29 @@
-<script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
-import { useUserStore } from './stores/user'
+<script>
+import { computed, defineAsyncComponent } from 'vue'
+import { useRoute } from 'vue-router'
 
-const userStore = useUserStore()
+const EmptyLayout = defineAsyncComponent(() => import('@/layouts/EmptyLayout.vue'))
+const DefaultLayout = defineAsyncComponent(() => import('@/layouts/DefaultLayout.vue'))
 
-const { user } = storeToRefs(userStore)
 
-onMounted(() => {
-  user.value
-})
+export default {
+    components: {
+        DefaultLayout,
+        EmptyLayout
+    },
+    setup() {
+        const route = useRoute()
+        const layout = computed(() => route.meta.layout || 'DefaultLayout')
+
+        return {
+            layout
+        }
+    }
+}
 </script>
 
 <template>
-  <RouterView />
+    <component :is="layout" />
 </template>
 
 <style lang="scss" scoped></style>
