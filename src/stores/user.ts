@@ -16,12 +16,10 @@ export const useUserStore = defineStore(
             status.value = ''
             loading.value = true
             try {
-                console.log('Test')
                 const res = await axios.post('auth/login', {
                     login,
                     password,
                 })
-                console.log(res)
                 user.value = {
                     name: res.data.name,
                     email: res.data.email,
