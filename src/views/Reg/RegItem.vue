@@ -6,6 +6,11 @@ import axios from 'axios'
 import { setFields } from '@/helpers'
 import type { SectionData } from '@/types/section'
 import Paginator from 'primevue/paginator'
+import ButtonIcon from '@/components/ui/ButtonIcon.vue'
+import InputSwitch from 'primevue/inputswitch'
+import Toast from 'primevue/toast'
+import { useFile } from '@/composables/file'
+import { useToast } from 'primevue/usetoast'
 
 const route = useRoute()
 
@@ -38,11 +43,99 @@ const data: SectionData = reactive({
     total: 0,
     total_page: 1,
 })
+
+const toast = useToast()
+
+const { downloadFile, uploadFile, inputFile } = useFile()
+
+const downloadHandler = () => {
+    downloadFile(`${route.params.id}.csv`, {
+        data: {
+            section: 'reg',
+            url: route.params.id
+        },
+        url: 'data/download',
+        onError(error) {
+            toast.add({
+                severity: 'error',
+                summary: `Ошибка`,
+                detail: error.message,
+            })
+        }
+    })
+}
+
+const uploaderHandler = (event) => {
+    uploadFile('facebook/upload', {
+        file: event.target.files[0],
+        formDataAdditional: [
+            ['section', 'reg'],
+            ['url', route.params.id]
+        ],
+        onSuccess(response) {
+            toast.add({
+                severity: 'success',
+                summary: ``,
+                detail: response.data.message,
+            })
+
+            event.target.value = null
+            facebookStore.getFacebookData()
+        },
+        onError(error) {
+            toast.add({
+                severity: 'error',
+                summary: `Ошибка`,
+                detail: error.message,
+            })
+        }
+    })
+}
+
+const removeAllPosts = () => {
+    axios.post('data/remove-all', data).then(() => {
+        fetchData({ page: 1, section: 'reg', url: route.params.id })
+    }).catch((error) => {
+        toast.add({
+            severity: 'error',
+            summary: `Ошибка`,
+            detail: error.message,
+        })
+    } )
+}
 </script>
 
 <template>
     <AppLayout>
-        <h2 class="title reg-links__title">{{ data.section_name }} ({{ data.total }})</h2>
+        <div class="section__header">
+            <h2 class="title">{{ data.section_name }} ({{ data.total }})</h2>
+            <div class="section__header-panel">
+                <Toast />
+                <ButtonIcon src="/icons/download.svg"
+                            alt="Скачать"
+                            tooltip
+                            border="none"
+                            backgroundColor="#0067D5"
+                            @click="downloadHandler"
+                />
+                <ButtonIcon src="/icons/upload.svg"
+                            alt="Загрузить"
+                            tooltip
+                            border="none"
+                            backgroundColor="#0067D5"
+                            @click="$refs.inputFile.click()"
+                />
+                <ButtonIcon src="/icons/delete.svg"
+                            alt="Удалить все"
+                            tooltip
+                            border="none"
+                            backgroundColor="#E0281B"
+                            @click="removeAllPosts"
+                />
+                <input ref="inputFile" type='file' accept=".csv" hidden @change="uploaderHandler" />
+            </div>
+        </div>
+
         <div class="table__wrapper">
             <table class="table">
                 <thead>

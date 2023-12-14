@@ -6,17 +6,23 @@ import { useDark } from '@vueuse/core'
 import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
 import Dropdown from 'primevue/dropdown'
-import { ref } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
+import axios from 'axios'
 
-const isDark = useDark({
-    valueDark: 'dark',
-    valueLight: 'light',
+onBeforeMount(async () => {
+    const responseStatus = await axios.post("stats/info");
+    const { valid, invalid } = responseStatus.data.statuses
+
+    statuses.value = [...valid, ...invalid].map(item => ({
+        name: item.text,
+        value: item.status
+    }))
 })
 
+const statuses = ref([])
+
 const selectedStatus = ref<string>('')
-const status = ref([
-	{ name: 'чекпоинт' }
-])
+
 
 const selectedGeo = ref<string>('')
 const geo = ref([
@@ -24,13 +30,11 @@ const geo = ref([
 ])
 
 const selectedNowStatus = ref<string>('')
-const nowStatus = ref([
-	{ name: 'чекпоинт' }
-])
+const nowStatus = computed(() => statuses.value.filter(item => item.value !== selectedNewStatus.value))
 
 const selectedNewStatus = ref<string>('')
 const newStatus = ref([
-	{ name: 'готов к заливу' }
+	{ name: 'готов к заливу', value: '' }
 ])
 
 const logi = ref('')
@@ -79,15 +83,43 @@ const logi = ref('')
 						<div class="facebook__add-content">
 							<div class="facebook__add-items">
 								<div class="facebook__add-dropdown">
-									<Dropdown v-model="selectedNowStatus" icon="none" :options="nowStatus" optionLabel="name"
-										placeholder="чекпоинт" unstyled
-										:pt="{ root: { class: 'now__root' }, trigger: { class: 'now__trigger' }, panel: { class: 'now__panel' }, item: { class: 'now__item' }, input: { class: 'now__input' } }" />
+									<Dropdown v-model="selectedNowStatus"
+                                              icon="none"
+                                              :options="nowStatus"
+                                              optionLabel="name"
+                                              placeholder="текущий статус"
+                                              unstyled
+                                              :pt="{
+                                                  root: { class: 'now__root' },
+                                                  trigger: { class: 'now__trigger' },
+                                                  panel: { class: 'now__panel' },
+                                                  item: { class: 'now__item' },
+                                                  input: { class: 'now__input' },
+                                                  wrapper: {style: {
+                                                      maxHeight: '200px',
+                                                      overflow: 'auto'
+                                                  }}
+                                              }" />
 									<span class="facebook__add-span">Текущий статус:</span>
 								</div>
 								<div class="facebook__add-dropdown">
-									<Dropdown v-model="selectedNewStatus" icon="none" :options="newStatus" optionLabel="name"
-										placeholder="готов к заливу" unstyled
-										:pt="{ root: { class: 'new__root' }, trigger: { class: 'new__trigger' }, panel: { class: 'new__panel' }, item: { class: 'new__item' }, input: { class: 'new__input' } }" />
+									<Dropdown v-model="selectedNewStatus"
+                                              icon="none"
+                                              :options="statuses"
+                                              optionLabel="name"
+                                              placeholder="новый статус"
+                                              unstyled
+                                              :pt="{
+                                                  root: { class: 'new__root' },
+                                                  trigger: { class: 'new__trigger' },
+                                                  panel: { class: 'new__panel' },
+                                                  item: { class: 'new__item' },
+                                                  input: { class: 'new__input' },
+                                                  wrapper: {style: {
+                                                      maxHeight: '200px',
+                                                      overflow: 'auto'
+                                                  }}
+                                              }" />
 									<span class="facebook__add-span">Новый статус:</span>
 								</div>
 							</div>

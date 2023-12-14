@@ -12,6 +12,13 @@ import MultiSelect from 'primevue/multiselect'
 onBeforeMount(async () => {
     try {
         const res = await axios.post('setting/get', { code: 'checkpoint' })
+        const responseStatus = await axios.post("stats/info");
+        const { valid, invalid } = responseStatus.data.statuses
+
+        checkpoint.value = [...valid, ...invalid].map(item => ({
+            name: item.text,
+            value: item.status
+        }))
         setFields(fields, res.data.fields)
     } catch (error) {
         console.log(error)
@@ -39,51 +46,10 @@ const selectedCheckpoint = computed({
         fields.get_statuses = val.map(item => item?.value);
     }
 })
-const checkpoint = ref([
-        { value: 'no_status', name: 'нет статуса' },
-        { value: 'sliv', name: 'готов к заливу рекламы' },
-        { value: 'call_friends', name: 'Попросил позвонить друзьям (чекпоинт)' },
-        { value: 'ADS', name: 'готов к заливу рекламы (акк на котором друзей больше 4.5к)' },
-        { value: 'update', name: 'этого статуса не будет я его потом уберу нахуй' },
-        { value: 'invite', name: 'живой аккаунт в процессе фарама' },
-        { value: 'checkpoint', name: 'Чекпоинт (распределительный пункт)' },
-        { value: 'zagruzil_selfy', name: 'Загрузил селфи' },
-        { value: 'disable', name: 'Аккаунт отключен (Disable)' },
-        { value: 'zagruzil_doki', name: 'Загрузил документы на аккаунт' },
-        { value: 'message', name: 'Пишет сообщения' },
-        { value: 'telephone', name: 'Аккаунт попросил отправить код на телефон' },
-        { value: 'tapto', name: 'этот тоже утраченный статус уберу чуть позже' },
-        { value: 'recaptcha', name: 'аккаунт не смог разгадать рекапчу' },
-        { value: 'bad_mail', name: 'Не смог получить код с почты' },
-        { value: 'bad_phone', name: 'утраченный статус' },
-        { value: 'email_update', name: 'К Аккаунту не привязана почта, просит отправить код на почту' },
-        { value: 'bad_pass', name: 'Неверный пароль на аккаунте' },
-        { value: 'changePass', name: 'Необходимо поменять пароль на аккаунте' },
-        { value: 'selfy', name: 'Селфи' },
-        { value: 'selfy_not_load', name: 'Не загрузил селфи' },
-        { value: 'worm', name: 'Аккаунт в процессе фарма' },
-        { value: 'friends', name: 'Попросил угадать друзей при разбане' },
-        { value: 'wait_aproove', name: 'Ожидаем подтверждения отправленных доков / селфи' },
-        { value: 'bad_login', name: 'Неверный логин' },
-        { value: 'err_send_mes_mail', name: 'Ошибка отправки запроса кода с почты для смены пароля' },
-        { value: 'zrd', name: 'Запрет рекламной деятельности' },
-        { value: 'zrd_plus', name: 'Прошел запрет рекламной деятельности' },
-        { value: 'zrd_plus_up', name: 'Залитые акки с пройденным ЗРД' },
-        { value: 'zrd_bm', name: 'Пройден ЗРД + БМ создан' },
-        { value: 'ads_block', name: 'Заблокирован рекламный кабинет навсегда' },
-        { value: 'zrd_plus_bm', name: 'Аккаунты с пройденным ЗРД + БМ верифицированный' },
-        { value: 'bm', name: 'Аккаунты с подтвержденным БМ, ЗРД не пройден' },
-        { value: 'zrd_plus_bm_not_aproove', name: 'ЗРД пройден БМ не подтвержден' },
-        { value: 'worm_bm_not_aproove', name: 'Аккаунты в процессе фарма БМ не подтвержден' },
-        { value: 'worm_bm_aproove', name: 'Аккаунты в процессе фарма БМ подтвержден' },
-        { value: 'back_from_store', name: 'Выгрузка из магазина' },
-        { value: 'incorrect_pass', name: 'Неверный пароль на аккаунте' },
-        { value: 'doc_not_load', name: 'Не удалось загрузить документы' },
-        { value: 'another_computer', name: 'Автозироваться на прежнем устройстве' },
-        { value: 'code_not_received_to_phone', name: 'Не пришел код на телефон' },
-    ],
-)
-
+const checkpoint = ref([])
+const unselectStatus = status => {
+    selectedCheckpoint.value = selectedCheckpoint.value.filter(item => item?.value !== status?.value)
+}
 
 </script>
 
@@ -141,9 +107,9 @@ const checkpoint = ref([
                 >
                 </MultiSelect>
                 <div class="custom-multiselect__label-list">
-                    <div class="custom-multiselect__token" v-for="item of checkpoint">
+                    <div class="custom-multiselect__token" v-for="item of selectedCheckpoint">
                         <div class="custom-multiselect__selected-value">{{ item.name }}</div>
-                        <div class="custom-multiselect__selected-remove" @click="unselectCountry(item)">
+                        <div class="custom-multiselect__selected-remove" @click="unselectStatus(item)">
                             <svg width="14"
                                  height="14"
                                  viewBox="0 0 14 14"

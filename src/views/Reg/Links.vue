@@ -72,7 +72,7 @@ const data = ref<LinkItem[]>([])
         min-width: 32px;
         padding: 0 5px;
         border-radius: 12px;
-        background-color: #e0281b;
+        background-color: #16c050;
         display: flex;
         align-items: center;
         justify-content: center;

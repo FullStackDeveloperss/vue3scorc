@@ -37,6 +37,13 @@ export function useFile() {
 
         formData.append('file', options.file)
 
+        if (options.formDataAdditional) {
+            options.formDataAdditional.forEach(item => {
+                formData.append(item[0], item[1])
+            })
+        }
+
+
         axios.post(url, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             onUploadProgress: progressEvent => {

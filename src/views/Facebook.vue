@@ -45,7 +45,7 @@ watch(
 
 const toast = useToast()
 
-const { downloadFile, uploadFile } = useFile()
+const { downloadFile, uploadFile, inputFile } = useFile()
 const uploaderHandler = (event) => {
     uploadFile('facebook/upload', {
         file: event.target.files[0],
@@ -183,7 +183,7 @@ const downloadHandler = () => {
                                 border="none"
                                 backgroundColor="#0067D5"
                                 @click="downloadHandler" />
-                    <input type='file' accept=".xlsx" hidden @change="uploaderHandler" />
+                    <input ref="inputFile" type='file' accept=".xlsx" hidden @change="uploaderHandler" />
                     <ButtonIcon src="/icons/upload.svg"
                                 alt="Скачать"
                                 border="none"
