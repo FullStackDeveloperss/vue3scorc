@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Jost:wght@700&family=Manrope:wght@400;500;600;700&display=swap");
 
+@import "./base";
 @import "./dropdown-nav";
 @import "./dropdown-date";
 @import "./dropdown-profile";
@@ -21,11 +22,12 @@
 @import "./checkbox";
 @import "./switch";
 @import "./prime-icon";
-@import "./prime-upload";
+@import "./prime-toast";
+@import "./prime-multiselect";
 @import "./common";
 @import "./slider";
 @import "./radio";
-@import "./paginator.scss";
+@import "./paginator";
 
 
 * {

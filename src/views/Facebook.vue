@@ -14,6 +14,7 @@ import debounce from 'lodash.debounce'
 import axios from 'axios'
 import { useToast } from 'primevue/usetoast'
 import Toast from 'primevue/toast'
+import { useFile } from '@/composables/file.js'
 
 const facebookStore = useFacebookStore()
 const { facebookData, selectedRegister, sortRegister, selectedSort, sortSort, page } = storeToRefs(facebookStore)
@@ -43,55 +44,44 @@ watch(
 )
 
 const toast = useToast()
-const uploadFile = async (event) => {
-    console.log(event.target.files[0])
-    let formData = new FormData()
 
-    formData.append('file', event.target.files[0])
+const { downloadFile, uploadFile } = useFile()
+const uploaderHandler = (event) => {
+    uploadFile('facebook/upload', {
+        file: event.target.files[0],
+        onSuccess(response) {
+            toast.add({
+                severity: 'success',
+                summary: ``,
+                detail: response.data.message,
+            })
 
-    try {
-        const response = await axios.post('facebook/upload', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        })
-
-        console.log(123123)
-        toast.add({
-            severity: 'success',
-            summary: ``,
-            detail: response.data.message,
-        })
-
-        event.target.value = null
-    } catch (e) {
-        console.log(e)
-    }
-
-    await facebookStore.getFacebookData()
+            event.target.value = null
+            facebookStore.getFacebookData()
+        },
+        onError(error) {
+            toast.add({
+                severity: 'error',
+                summary: `Ошибка`,
+                detail: error.message,
+            })
+        }
+    })
+}
+const downloadHandler = () => {
+    downloadFile('profiles-fb.xlsx', {
+        data: {},
+        url: 'facebook/download',
+        onError(error) {
+            toast.add({
+                severity: 'error',
+                summary: `Ошибка`,
+                detail: error.message,
+            })
+        }
+    })
 }
 
-const downloadFile = () => {
-    let file_name = 'profiles-fb.xlsx'
-
-    const data = {}
-
-    axios
-        .post('facebook/download', data, {
-            responseType: 'blob',
-        })
-        .then((response) => {
-            var fileURL = window.URL.createObjectURL(new Blob([response.data]))
-            var fileLink = document.createElement('a')
-            fileLink.href = fileURL
-            fileLink.setAttribute('download', file_name)
-            document.body.appendChild(fileLink)
-            fileLink.click()
-        })
-        .catch(() => {
-            console.log(123)
-        })
-}
 </script>
 
 <template>
@@ -188,12 +178,18 @@ const downloadFile = () => {
                         backgroundColor="#0067D5"
                         @click="facebookStore.setActivityAll(0)"
                     />
-                    <ButtonIcon src="/icons/download.svg" alt="Скачать" border="none" backgroundColor="#0067D5" @click="downloadFile" />
+                    <ButtonIcon src="/icons/download.svg"
+                                alt="Скачать"
+                                border="none"
+                                backgroundColor="#0067D5"
+                                @click="downloadHandler" />
+                    <input type='file' accept=".xlsx" hidden @change="uploaderHandler" />
+                    <ButtonIcon src="/icons/upload.svg"
+                                alt="Скачать"
+                                border="none"
+                                backgroundColor="#0067D5"
+                                @click="$refs.inputFile.click()" />
                     <Toast />
-                    <label class="upload-btn">
-                        <img src="/icons/upload.svg" alt="">
-                        <input type='file' accept=".xlsx" hidden @change="uploadFile" />
-                    </label>
                 </div>
             </div>
             <div class="facebook__adaptive" v-if="width < 430">
@@ -397,19 +393,4 @@ const downloadFile = () => {
         color: #eee;
     }
 }
-
-
-.upload-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 16px;
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-    position: relative;
-    background: #0067D5;
-    cursor: pointer;
-}
-
 </style>

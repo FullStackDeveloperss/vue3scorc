@@ -27,13 +27,13 @@ const profile = ref({
 			</div>
 			<div class="profile__form-info">
 				<fieldset class="profile__form-fieldset">
-					<InputText v-model:input="profile.login" type="text" placeholder="afonin.design@gmail.com"
+					<InputText v-model:input="profile.login" type="text" placeholder=""
 						src="/icons/email.svg" alt="Логин" v-if="!isDark" />
-					<InputText v-model:input="profile.login" type="text" placeholder="afonin.design@gmail.com"
+					<InputText v-model:input="profile.login" type="text" placeholder=""
 						src="/icons/email-dark.svg" alt="Логин" v-else />
-					<InputText v-model:input="profile.password" type="password" placeholder="•••••••••••••••••••••"
+					<InputText v-model:input="profile.password" type="password" placeholder=""
 						src="/icons/password.svg" pic="/icons/eye-off.svg" alt="Пароль" v-if="!isDark" />
-					<InputText v-model:input="profile.password" type="password" placeholder="•••••••••••••••••••••"
+					<InputText v-model:input="profile.password" type="password" placeholder=""
 						src="/icons/password-dark.svg" pic="/icons/eye-off-dark.svg" alt="Пароль" v-else />
 				</fieldset>
 				<ButtonMain text="Сохранить" />
@@ -43,16 +43,16 @@ const profile = ref({
 			<fieldset class="profile__form-fieldset">
 				<div class="profile__form-label">
 					<span class="profile__form-text">Логин</span>
-					<InputText v-model:input="profile.login" type="text" placeholder="afonin.design@gmail.com"
+					<InputText v-model:input="profile.login" type="text" placeholder=""
 						src="/icons/email.svg" alt="Логин" v-if="!isDark" />
-					<InputText v-model:input="profile.login" type="text" placeholder="afonin.design@gmail.com"
+					<InputText v-model:input="profile.login" type="text" placeholder=""
 						src="/icons/email-dark.svg" alt="Логин" v-else />
 				</div>
 				<div class="profile__form-label">
 					<span class="profile__form-text">Пароль</span>
-					<InputText v-model:input="profile.password" type="password" placeholder="•••••••••••••••••••••"
+					<InputText v-model:input="profile.password" type="password" placeholder=""
 						src="/icons/password.svg" pic="/icons/eye-off.svg" alt="Пароль" v-if="!isDark" />
-					<InputText v-model:input="profile.password" type="password" placeholder="•••••••••••••••••••••"
+					<InputText v-model:input="profile.password" type="password" placeholder=""
 						src="/icons/password-dark.svg" pic="/icons/eye-off-dark.svg" alt="Пароль" v-else />
 				</div>
 				<ButtonMain text="Сохранить" />

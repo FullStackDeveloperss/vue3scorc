@@ -54,9 +54,9 @@ const saveProfileSettings = async () => {
 						alt="Логин" v-if="!isDark" />
 					<InputText v-model:input="dataLogin.name" type="text" placeholder="alexeyafonin" src="/icons/user-dark.svg"
 						alt="Логин" v-else />
-					<InputText v-model:input="dataLogin.email" type="text" placeholder="afonin.design@gmail.com"
+					<InputText v-model:input="dataLogin.email" type="text" placeholder=""
 						src="/icons/email.svg" alt="Email" v-if="!isDark" />
-					<InputText v-model:input="dataLogin.email" type="text" placeholder="afonin.design@gmail.com"
+					<InputText v-model:input="dataLogin.email" type="text" placeholder=""
 						src="/icons/email-dark.svg" alt="Email" v-else />
 				</fieldset>
 				<ButtonMain :loading="sendingData" text="Сохранить" />
@@ -73,9 +73,9 @@ const saveProfileSettings = async () => {
 				</div>
 				<div class="profile__form-label">
 					<span class="profile__form-text">E-mail</span>
-					<InputText v-model:input="dataLogin.email" type="text" placeholder="afonin.design@gmail.com"
+					<InputText v-model:input="dataLogin.email" type="text" placeholder=""
 						src="/icons/email.svg" alt="Email" v-if="!isDark" />
-					<InputText v-model:input="dataLogin.email" type="text" placeholder="afonin.design@gmail.com"
+					<InputText v-model:input="dataLogin.email" type="text" placeholder=""
 						src="/icons/email-dark.svg" alt="Email" v-else />
 				</div>
 				<ButtonMain text="Сохранить" />

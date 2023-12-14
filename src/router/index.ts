@@ -2,6 +2,9 @@ import { useUserStore } from '@/stores/user'
 import Dashboard from '@/views/Dashboard.vue'
 import { storeToRefs } from 'pinia'
 import { createRouter, createWebHistory } from 'vue-router'
+import { useWindowSize } from '@vueuse/core'
+import { useRootStore } from '@/stores/root'
+const { width } = useWindowSize();
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -211,6 +214,12 @@ router.beforeEach((to, from, next) => {
 		next('/login')
 	} else {
 		next()
+	}
+
+	if (width.value < 1024 && from.name !== 'login') {
+		const rootStore = useRootStore()
+		const { isCloseSidebar } = storeToRefs(rootStore)
+		isCloseSidebar.value = true
 	}
 })
 

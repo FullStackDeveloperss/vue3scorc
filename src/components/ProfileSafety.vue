@@ -40,13 +40,13 @@ const saveNewPassword = async () => {
 			</div>
 			<div class="profile__form-info">
 				<fieldset class="profile__form-fieldset">
-					<InputText v-model:input="safety.password" type="text" placeholder="sfaslfklaskf34234re"
+					<InputText v-model:input="safety.password" type="text" placeholder=""
 						src="/icons/password.svg" pic="/icons/eye.svg" alt="Пароль" v-if="!isDark" />
-					<InputText v-model:input="safety.password" type="text" placeholder="sfaslfklaskf34234re"
+					<InputText v-model:input="safety.password" type="text" placeholder=""
 						src="/icons/password-dark.svg" pic="/icons/eye-dark.svg" alt="Пароль" v-else />
-					<InputText v-model:input="safety.password_confirmation" type="password" placeholder="•••••••••••••••••••••"
+					<InputText v-model:input="safety.password_confirmation" type="password" placeholder=""
 						src="/icons/password.svg" pic="/icons/eye-off.svg" alt="Пароль" v-if="!isDark" />
-					<InputText v-model:input="safety.password_confirmation" type="password" placeholder="•••••••••••••••••••••"
+					<InputText v-model:input="safety.password_confirmation" type="password" placeholder=""
 						src="/icons/password-dark.svg" pic="/icons/eye-off-dark.svg" alt="Пароль" v-else />
 				</fieldset>
 				<ButtonMain :loading="sendingData" text="Сохранить" />
@@ -56,16 +56,16 @@ const saveNewPassword = async () => {
 			<fieldset class="profile__form-fieldset">
 				<div class="profile__form-label">
 					<span class="profile__form-text">Пароль</span>
-					<InputText v-model:input="safety.password" type="text" placeholder="sfaslfklaskf34234re"
+					<InputText v-model:input="safety.password" type="text" placeholder=""
 						src="/icons/password.svg" pic="/icons/eye.svg" alt="Пароль" v-if="!isDark" />
-					<InputText v-model:input="safety.password" type="text" placeholder="sfaslfklaskf34234re"
+					<InputText v-model:input="safety.password" type="text" placeholder=""
 						src="/icons/password-dark.svg" pic="/icons/eye-dark.svg" alt="Пароль" v-else />
 				</div>
 				<div class="profile__form-label">
 					<span class="profile__form-text">Подтверждение пароля</span>
-					<InputText v-model:input="safety.password_confirmation" type="password" placeholder="•••••••••••••••••••••"
+					<InputText v-model:input="safety.password_confirmation" type="password" placeholder=""
 						src="/icons/password.svg" pic="/icons/eye-off.svg" alt="Пароль" v-if="!isDark" />
-					<InputText v-model:input="safety.password_confirmation" type="password" placeholder="•••••••••••••••••••••"
+					<InputText v-model:input="safety.password_confirmation" type="password" placeholder=""
 						src="/icons/password-dark.svg" pic="/icons/eye-off-dark.svg" alt="Пароль" v-else />
 				</div>
 				<ButtonMain :loading="sendingData" text="Сохранить" />

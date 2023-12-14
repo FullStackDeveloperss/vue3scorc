@@ -21,26 +21,24 @@ import { useRootStore } from '@/stores/root'
 import { useDark } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
-import { useFacebookStore } from '@/stores/facebook'
-import type { Date } from '@/types/general'
 import axios from 'axios'
-import type { Dashboard } from "@/types/dashboard";
+import type { Dashboard } from '@/types/dashboard'
 
 const isDark = useDark({
     valueDark: 'dark',
     valueLight: 'light',
 })
 
-const dashboard = ref<Dashboard | null>(null);
+const dashboard = ref<Dashboard | null>(null)
 
 const getDashboardInfo = async () => {
     try {
-        const res = await axios.post("stats/info");
-        dashboard.value = res.data;
+        const res = await axios.post('stats/info')
+        dashboard.value = res.data
     } catch (error) {
-        console.log(error);
+        console.log(error)
     }
-};
+}
 
 onMounted(() => {
     console.log(321)
@@ -52,7 +50,7 @@ const { isCloseSidebar } = storeToRefs(rootStore)
 </script>
 
 <template>
-	<div >
+    <div>
         <perfect-scrollbar class="sidebar" :class="{ 'sidebar__close': isCloseSidebar }">
             <div class="sidebar__logo" v-if="!isDark">
                 <img v-if="!isCloseSidebar" src="/images/logo-dashboard.png" width="228" height="46">
@@ -81,7 +79,8 @@ const { isCloseSidebar } = storeToRefs(rootStore)
 								<span class="sidebar__main-num sidebar__main-num_red">
                                     {{ dashboard ? dashboard?.total_profiles - dashboard?.valid : 0 }}
                                 </span>
-                                    <span class="sidebar__main-num sidebar__main-num_green">{{ dashboard?.valid || 0 }}</span>
+                                    <span class="sidebar__main-num sidebar__main-num_green">{{ dashboard?.valid || 0
+                                        }}</span>
                                 </div>
                             </div>
                         </RouterLink>
@@ -205,210 +204,234 @@ const { isCloseSidebar } = storeToRefs(rootStore)
                 </div>
             </nav>
         </perfect-scrollbar>
-
-	</div>
+    </div>
 </template>
 
 <style lang="scss">
+@import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css';
+
+.ps {
+    .ps__rail-y > .ps__thumb-y,
+    .ps__rail-y:hover > .ps__thumb-y,
+    .ps__rail-y:focus > .ps__thumb-y,
+    .ps__rail-y.ps--clicking .ps__thumb-y {
+        background: #0067d5;
+        width: 8px;
+        border-radius: 4px;
+    }
+
+    .ps__rail-y:hover,
+    .ps__rail-y:focus,
+    .ps__rail-y.ps--clicking {
+        background: none;
+        width: 8px;
+    }
+}
+
+
+.ps__thumb-y {
+    background: #0067d5;
+}
+
 .sidebar {
-	position: fixed;
-	height: 100%;
-	background-color: #F8F9FB;
-	border-right: 1px solid #EEE;
-	max-width: 300px;
-	width: 100%;
-	padding: 32px;
-	overflow-y: auto;
-	overflow-x: hidden;
-	transition: all .3s ease-in-out;
-	z-index: 10;
+    position: fixed;
+    height: 100%;
+    background-color: #F8F9FB;
+    border-right: 1px solid #EEE;
+    max-width: 300px;
+    width: 100%;
+    padding: 32px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: all .3s ease-in-out;
+    z-index: 10;
 
-	@media only screen and (max-width: 1279px) and (min-width: 1024px) {
-		padding: 16px;
-	}
+    @media only screen and (max-width: 1279px) and (min-width: 1024px) {
+        padding: 16px;
+    }
 
-	@media only screen and (max-width: 743px) and (min-width: 320px) {
-		position: absolute;
-		transform: translateY(60px);
-		max-width: 100%;
-		padding: 20px 10px;
-		min-height: 100vh;
-	}
+    @media only screen and (max-width: 743px) and (min-width: 320px) {
+        position: absolute;
+        transform: translateY(60px);
+        max-width: 100%;
+        padding: 20px 10px;
+        min-height: 100vh;
+    }
 
-	&__close {
-		max-width: 118px;
+    &__close {
+        max-width: 118px;
 
-		@media only screen and (max-width: 1279px) and (min-width: 1024px) {
-			max-width: 84px;
-		}
+        @media only screen and (max-width: 1279px) and (min-width: 1024px) {
+            max-width: 84px;
+        }
 
-		@media only screen and (max-width: 1023px) and (min-width: 744px) {
-			transform: translateX(-300px);
-			max-width: 0;
-		}
+        @media only screen and (max-width: 1023px) and (min-width: 744px) {
+            transform: translateX(-300px);
+            max-width: 0;
+        }
 
-		@media only screen and (max-width: 743px) and (min-width: 320px) {
-			transform: translate(-100%, 60px);
-			max-width: 0;
-		}
+        @media only screen and (max-width: 743px) and (min-width: 320px) {
+            transform: translate(-100%, 60px);
+            max-width: 0;
+        }
 
-		& .sidebar__text {
-			display: none;
-		}
+        & .sidebar__text {
+            display: none;
+        }
 
-		& .sidebar__title {
-			display: none;
-		}
+        & .sidebar__title {
+            display: none;
+        }
 
-		& .sidebar__main {
-			margin-bottom: 0;
-		}
+        & .sidebar__main {
+            margin-bottom: 0;
+        }
 
-		& .sidebar__work {
-			margin-bottom: 0;
-		}
+        & .sidebar__work {
+            margin-bottom: 0;
+        }
 
-		& .sidebar__link {
-			gap: 0;
-			width: 54px;
-			padding: 0 16px;
+        & .sidebar__link {
+            gap: 0;
+            width: 54px;
+            padding: 0 16px;
 
-			@media only screen and (max-width: 1279px) and (min-width: 1024px) {
-				width: 52px;
-			}
-		}
+            @media only screen and (max-width: 1279px) and (min-width: 1024px) {
+                width: 52px;
+            }
+        }
 
-		& .sidebar__main-nums {
-			display: none;
-		}
+        & .sidebar__main-nums {
+            display: none;
+        }
 
-		& .sidebar__main-info {
-			gap: 0;
-		}
-	}
+        & .sidebar__main-info {
+            gap: 0;
+        }
+    }
 
-	&__main-link {
-		&_facebook {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-		}
-	}
+    &__main-link {
+        &_facebook {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
 
-	&__main-info {
-		display: flex;
-		align-items: center;
-		gap: 16px;
-	}
+    &__main-info {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
 
-	&__main-nums {
-		display: flex;
-		align-items: center;
-		gap: 2px;
-	}
+    &__main-nums {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+    }
 
-	&__main-num {
-		padding: 1px 6px;
-		font-size: 12px;
-		line-height: 18px;
-		letter-spacing: 0.24px;
-		color: #fff;
-		border-radius: 100px;
+    &__main-num {
+        padding: 1px 6px;
+        font-size: 12px;
+        line-height: 18px;
+        letter-spacing: 0.24px;
+        color: #fff;
+        border-radius: 100px;
 
-		&_red {
-			background-color: #E0281B;
-		}
+        &_red {
+            background-color: #E0281B;
+        }
 
-		&_green {
-			background-color: #16C050;
-		}
-	}
+        &_green {
+            background-color: #16C050;
+        }
+    }
 
-	&__logo {
-		display: flex;
-		justify-content: center;
-		margin-bottom: 32px;
+    &__logo {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 32px;
 
-		@media only screen and (max-width: 743px) and (min-width: 320px) {
-			display: none;
-		}
-	}
+        @media only screen and (max-width: 743px) and (min-width: 320px) {
+            display: none;
+        }
+    }
 
-	&__main {
-		margin-bottom: 12px;
-	}
+    &__main {
+        margin-bottom: 12px;
+    }
 
-	&__list {
-		display: flex;
-		flex-direction: column;
-	}
+    &__list {
+        display: flex;
+        flex-direction: column;
+    }
 
-	&__link {
-		padding: 0 12px 0 16px;
-		display: flex;
-		align-items: center;
-		gap: 16px;
-		width: 100%;
-		height: 40px;
-		border-radius: 30px;
-		transition: all .3s ease-in-out;
+    &__link {
+        padding: 0 12px 0 16px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+        height: 40px;
+        border-radius: 30px;
+        transition: all .3s ease-in-out;
 
-		& path {
-			transition: all .3s ease-in-out;
-		}
+        & path {
+            transition: all .3s ease-in-out;
+        }
 
-		&:hover {
-			background-color: #eee;
-			color: #1B395B;
-		}
+        &:hover {
+            background-color: #eee;
+            color: #1B395B;
+        }
 
-		&:hover path {
-			stroke: #1B395B;
-		}
-	}
+        &:hover path {
+            stroke: #1B395B;
+        }
+    }
 
-	&__text {
-		font-size: 13px;
-		line-height: 20px;
-		letter-spacing: 0.22px;
-	}
+    &__text {
+        font-size: 13px;
+        line-height: 20px;
+        letter-spacing: 0.22px;
+    }
 
-	&__title {
-		font-size: 13px;
-		font-weight: 700;
-		line-height: normal;
-		letter-spacing: normal;
-		color: #1B395B;
-		margin-bottom: 6px;
-		padding: 0 6px;
-	}
+    &__title {
+        font-size: 13px;
+        font-weight: 700;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #1B395B;
+        margin-bottom: 6px;
+        padding: 0 6px;
+    }
 
-	&__work {
-		margin-bottom: 12px;
-	}
+    &__work {
+        margin-bottom: 12px;
+    }
 }
 
 .dark .sidebar {
-	background-color: #1B395B;
-	border-right: 1px solid #3C5A7B;
+    background-color: #1B395B;
+    border-right: 1px solid #3C5A7B;
 
-	&__item {
-		color: #778DA6;
-	}
+    &__item {
+        color: #778DA6;
+    }
 
-	&__title {
-		color: #778DA6;
-	}
+    &__title {
+        color: #778DA6;
+    }
 
-	&__link {
-		&:hover {
-			background-color: #1B395B;
-			color: #fff;
-		}
+    &__link {
+        &:hover {
+            background-color: #1B395B;
+            color: #fff;
+        }
 
-		&:hover path {
-			stroke: #fff;
-		}
-	}
+        &:hover path {
+            stroke: #fff;
+        }
+    }
 }
 </style>

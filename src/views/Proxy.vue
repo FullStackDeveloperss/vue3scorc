@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/components/layout/AppLayout.vue'
 import axios from 'axios'
-import { onBeforeMount, reactive, ref } from 'vue'
+import { computed, onBeforeMount, reactive, ref } from 'vue'
 import { setFields, startWatch } from '@/helpers'
 import type { Fields } from '@/types/proxy'
 import Paginator from 'primevue/paginator'
@@ -9,13 +9,11 @@ import Slider from 'primevue/slider'
 import ArrowDown from '@/components/icons/ArrowDown.vue'
 import ButtonIcon from '@/components/ui/ButtonIcon.vue'
 import InputSwitch from 'primevue/inputswitch'
-import FileUpload from 'primevue/fileupload'
 import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
 import StatusError from '@/components/icons/StatusError.vue'
 import ButtonMain from '@/components/ui/ButtonMain.vue'
-import ProgressBar from 'primevue/progressbar'
-
+import { useFile } from '@/composables/file'
 
 const proxyList = reactive({
     current_page: 1,
@@ -55,33 +53,24 @@ onBeforeMount(async () => {
     startWatch(fields, 'proxy')
 })
 
-
-const changePage = () => {
-
-}
-
 const openedProxyWarning = ref(true)
 
 const downloadValid = ref(false)
-const download = async () => {
-    try {
-        const response = await axios.post('data/proxy/download', {
-            valid: downloadValid ? 'valid' : 'all',
-        }, {
-            responseType: 'blob',
-        })
 
-        var fileURL = window.URL.createObjectURL(new Blob([response.data]))
-        var fileLink = document.createElement('a')
+const { downloadFile, inputFile, uploadingProgress, loading, uploadFile } = useFile()
 
-        fileLink.href = fileURL
-        fileLink.setAttribute('download', 'proxies.csv')
-        document.body.appendChild(fileLink)
-
-        fileLink.click()
-    } catch (error) {
-        console.log(error)
-    }
+const downloadHandler = () => {
+    downloadFile('proxies.csv', {
+        data: { valid: downloadValid ? 'valid' : 'all' },
+        url: 'data/proxy/download',
+        onError(error) {
+            toast.add({
+                severity: 'error',
+                summary: `Ошибка`,
+                detail: error.message,
+            })
+        },
+    })
 }
 
 const removeAllProxy = async () => {
@@ -89,7 +78,11 @@ const removeAllProxy = async () => {
         await axios.post('proxy/remove-all')
         await getDataFromApi()
     } catch (error) {
-        console.log(error)
+        toast.add({
+            severity: 'error',
+            summary: `Ошибка`,
+            detail: error.message,
+        })
     }
 }
 
@@ -99,67 +92,47 @@ const upload = reactive({
     proxy_file: null,
 })
 
-const uploadingProgress = ref(0)
-const loadingSubmit = ref(false)
-const uploadProxy = async () => {
-    loadingSubmit.value = true
-    let formData = new FormData()
-
-    formData.append('format', upload.proxy_format)
-    formData.append('file', upload.proxy_file)
-
-    try {
-        const response = await axios
-            .post('proxy/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                onUploadProgress: function(progressEvent: any) {
-                    uploadingProgress.value = parseInt(
-                        Math.round((progressEvent.loaded / progressEvent.total) * 100),
-                    )
-                }.bind(this),
-            })
-
-        resultUpload.proxy = response.data.proxy
-        resultUpload.rows = response.data.rows
-        resultUpload.message = response.data.message
-    } catch (error) {
-        console.log(error)
-    }
-
-    uploadingProgress.value = 0
-    loadingSubmit.value = false
-    upload.proxy_format = ''
-    upload.proxy_file = null
-
-    await getDataFromApi()
-}
-
-const file = ref()
 const toast = useToast()
 
-const resultUpload = reactive({
-    proxies: 0,
-    rows: 0,
-    message: '',
-})
 
-const onSelect = (data) => {
-    const file = data.files[0]
-    upload.proxy_format = file.type
-    upload.proxy_file = file
+const uploadHandler = async () => {
+    loading.value = true
+
+    uploadFile('proxy/upload', {
+        file: file.value,
+        async onSuccess(response) {
+            const { proxies, rows, message } = response.data
+
+            toast.add({
+                severity: 'success',
+                summary: message,
+                detail: `Всего прокси: ${proxies}
+                     Всего строк: ${rows}`,
+            })
+
+            await getDataFromApi()
+        },
+        onError(error) {
+            toast.add({
+                severity: 'error',
+                summary: `Ошибка`,
+                detail: error.message,
+            })
+        },
+        callback() {
+            inputFile.value.value = null
+            file.value = null
+        }
+    })
 }
 
-const onUpload = async (callback: any) => {
-    await uploadProxy()
-    callback()
-    toast.add({
-        severity: 'success',
-        summary: ``,
-        detail: `${resultUpload.message} <br/> Всего прокси: ${resultUpload.proxies} <br/> Всего строк: ${resultUpload.rows}`,
-    })
+const file = ref(null)
 
+const selectFile = () => {
+    file.value = inputFile.value.files[0]
+}
+const cancelFile = () => {
+    inputFile.value.value = null
 }
 </script>
 
@@ -181,8 +154,9 @@ const onUpload = async (callback: any) => {
                             tooltip
                             border="none"
                             backgroundColor="#0067D5"
-                            @click="download"
+                            @click="downloadHandler"
                 />
+                <Toast />
                 <ButtonIcon src="/icons/delete.svg"
                             alt="Удалить все"
                             tooltip
@@ -214,56 +188,18 @@ const onUpload = async (callback: any) => {
                     </p>
                 </div>
                 <div class="upload">
-                    <div class="file">
-                        {{ file }}
+                    <div class="upload__head">
+                        <input type='file' :value="fileValue" accept=".txt" hidden @change="selectFile" ref="inputFile" />
+                        <ButtonIcon src="/icons/upload.svg"
+                                    alt="Скачать"
+                                    border="none"
+                                    backgroundColor="#0067D5"
+                                    @click="$refs.inputFile?.click()" />
+                        <span v-if="file" class="upload__file-name">{{ file.name }}</span>
+                        <StatusError v-if="file" @click="cancelFile" />
                     </div>
-                    <Toast position="bottom-center">
-                        <template #message="{ message }">
-                            <div>
-                                <div v-html="message.detail"></div>
-                            </div>
-                        </template>
-                    </Toast>
-                    <FileUpload name="file"
-                                url="/api/proxy/upload"
-                                @upload="finishUpload($event)"
-                                accept=".txt"
-                                :customUpload="true"
-                                :maxFileSize="1000000"
-                                :pt="{
-                                    root: { class: 'upload__root' }
-                                }"
-                                @select="onSelect">
-                        <template #header="{ chooseCallback, uploadCallback, clearCallback, files }">
-                            <div class="proxy-upload__buttons">
-                                <ButtonIcon @click="chooseCallback()"
-                                            src="/icons/upload.svg"
-                                            alt="Загрузить"
-                                            border="none"
-                                            backgroundColor="#0067D5" />
-                                <div class="selected-file" v-if="!(!files || files.length === 0)">
-                                    <span class="selected-file__label">Файл txt с прокси</span>
-                                    <span class="selected-file__name">{{ files[0].name }}</span>
-                                </div>
-
-                                <StatusError v-show="!(!files || files.length === 0)" @click="clearCallback()" />
-                                <ButtonMain v-if="!(!files || files.length === 0)"
-                                            @click="onUpload(uploadCallback)"
-                                            text="Загрузить" />
-                            </div>
-                        </template>
-                        <template #content="{ files, progress }">
-                            <ProgressBar v-if="files.length > 0"
-                                         :value="progress"
-                                         :pt="{
-                                             root: { class: 'upload-progress' },
-                                             value: { class: 'upload-progress__value', style: { background: 'linear-gradient(to right, #10b981, #058f61)' } },
-                                             label: { class: 'upload-progress__label' }
-                                         }"
-                            />
-                        </template>
-                        <template #empty></template>
-                    </FileUpload>
+                    <div v-if="file" class="upload__progress"></div>
+                    <ButtonMain v-if="file" text="Загрузить" :loading="loading" @click="uploadHandler" />
                 </div>
             </form>
         </div>
@@ -300,7 +236,6 @@ const onUpload = async (callback: any) => {
             <Paginator
                 :rows="proxyList.per_page"
                 :totalRecords="proxyList.total"
-                @page="changePage"
                 :pt="{
                     root: { class: 'paginator__root reg-links__paginator' },
                 }"
@@ -314,20 +249,23 @@ const onUpload = async (callback: any) => {
 .upload {
     padding: 10px 20px 20px;
 
-    input[type="file"] {
-        display: none;
+    &__head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
 
-    &-progress {
-        position: relative;
+    &__file-name {
+        font-size: 13px;
+        line-height: 1.2;
+        color: #fff;
+    }
+
+    &__progress {
         margin-top: 24px;
     }
 
-}
 
-
-.upload-progress {
-    height: 20px;
 }
 
 .switch-wrapper {
@@ -339,18 +277,6 @@ const onUpload = async (callback: any) => {
 
     span {
         max-width: 120px;
-    }
-}
-
-.section__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
-
-    &-panel {
-        display: flex;
-        gap: 10px;
     }
 }
 
