@@ -112,32 +112,32 @@ const downloadHandler = () => {
                             <span class="facebook__nav-span">Сортировать по:</span>
                         </div>
                         <ButtonIcon
-                            border="1px solid #BFC5CD"
-                            :backgroundColor="facebookStore.sortOrder === 'asc' ? '#0067D5' : 'transparent'"
+                            :border="`1px solid ${facebookStore.sortOrder === 'asc' ? '#0067D5' : '#BFC5CD'}`"
+                            :backgroundColor="facebookStore.sortOrder === 'asc' ? 'rgba(0, 103, 213, 0.1)' : 'transparent'"
                             src="/icons/arrow-up.svg"
                             alt="Вверх"
                             v-if="!isDark"
                             @click="facebookStore.sortOrder = 'asc'"
                         />
                         <ButtonIcon
-                            border="1px solid #3C5A7B"
-                            :backgroundColor="facebookStore.sortOrder === 'asc' ? '#0067D5' : 'transparent'"
+                            :border="`1px solid ${facebookStore.sortOrder === 'asc' ? '#0067D5' : '#BFC5CD'}`"
+                            :backgroundColor="facebookStore.sortOrder === 'asc' ? 'rgba(0, 103, 213, 0.1)' : 'transparent'"
                             src="/icons/arrow-up-dark.svg"
                             alt="Вверх"
                             v-else
                             @click="facebookStore.sortOrder = 'asc'"
                         />
                         <ButtonIcon
-                            border="1px solid #BFC5CD"
-                            :backgroundColor="facebookStore.sortOrder === 'desc' ? '#0067D5' : 'transparent'"
+                            :border="`1px solid ${facebookStore.sortOrder === 'desc' ? '#0067D5' : '#BFC5CD'}`"
+                            :backgroundColor="facebookStore.sortOrder === 'desc' ? 'rgba(0, 103, 213, 0.1)' : 'transparent'"
                             src="/icons/arrow-down-sort.svg"
                             alt="Вниз"
                             v-if="!isDark"
                             @click="facebookStore.sortOrder = 'desc'"
                         />
                         <ButtonIcon
-                            border="1px solid #3C5A7B"
-                            :backgroundColor="facebookStore.sortOrder === 'desc' ? '#0067D5' : 'transparent'"
+                            :border="`1px solid ${facebookStore.sortOrder === 'desc' ? '#0067D5' : '#BFC5CD'}`"
+                            :backgroundColor="facebookStore.sortOrder === 'desc' ? 'rgba(0, 103, 213, 0.1)' : 'transparent'"
                             src="/icons/arrow-down-sort-dark.svg"
                             alt="Вниз"
                             v-else

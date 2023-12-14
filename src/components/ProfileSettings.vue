@@ -26,6 +26,8 @@ const lngs = ref<Lang[]>([
 
 const toggleDark = useToggle(isDark)
 const saveSettingsSite = () => {
+    if (isDark.value && selectedTheme.value.name === 'Темная') return false
+    if (!isDark.value && selectedTheme.value.name === 'Светлая') return false
     toggleDark()
 }
 

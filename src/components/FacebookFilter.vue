@@ -13,7 +13,11 @@ const { filterBy } = storeToRefs(facebookStore)
 
 <template>
 	<Accordion :activeIndex="1">
-		<AccordionTab :pt="{ headerAction: { class: 'accordion__headeraction' }, content: { class: 'accordion__content' }, }">
+		<AccordionTab :pt="{
+            headerAction: { class: 'accordion__headeraction' },
+            content: { class: 'accordion__content' },
+            root: { class: 'accordion__tab' }
+            }">
 			<template #header>
 				<div class="facebook__item">
 					<h3 class="facebook__subtitle">Фильтр</h3>

@@ -33,7 +33,7 @@ const fields: Fields = reactive({
 <template>
     <AppLayout>
         <div class="public">
-            <h2 class="inviter__title title">Настройка инвайтера</h2>
+            <h2 class="public__title title">Настройка инвайтера</h2>
             <div class="public__inner">
                 <div class="public__item public__item_reverse">
                     <InputSwitch v-model="fields.inviter_public" />

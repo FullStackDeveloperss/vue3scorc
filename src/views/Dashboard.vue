@@ -34,24 +34,24 @@ onBeforeMount(getDashboardInfo);
 
 <template>
   <AppLayout>
-<!--    <div class="dashboard">-->
-<!--      <h2 class="dashboard__title title">Дашборд</h2>-->
-<!--      <Dropdown-->
-<!--        v-model="selectedDate"-->
-<!--        icon="none"-->
-<!--        :options="dates"-->
-<!--        optionLabel="name"-->
-<!--        placeholder="Сегодня"-->
-<!--        unstyled-->
-<!--        :pt="{-->
-<!--          root: { class: 'date__root' },-->
-<!--          trigger: { class: 'date__trigger' },-->
-<!--          panel: { class: 'date__panel' },-->
-<!--          item: { class: 'date__item' },-->
-<!--          input: { class: 'date__input' },-->
-<!--        }"-->
-<!--      />-->
-<!--    </div>-->
+    <div class="dashboard">
+      <h2 class="dashboard__title title">Дашборд</h2>
+      <Dropdown
+        v-model="selectedDate"
+        icon="none"
+        :options="dates"
+        optionLabel="name"
+        placeholder="Сегодня"
+        unstyled
+        :pt="{
+          root: { class: 'date__root' },
+          trigger: { class: 'date__trigger' },
+          panel: { class: 'date__panel' },
+          item: { class: 'date__item' },
+          input: { class: 'date__input' },
+        }"
+      />
+    </div>
 <!--    <DashboardStatisticMain />-->
 <!--    <div class="dashboard__content">-->
 <!--      <DashboardCard-->
@@ -103,12 +103,12 @@ onBeforeMount(getDashboardInfo);
 <!--      <DashboardStatisticAccounts class="dashboard__info" />-->
 <!--      <DashboardStatisticActive class="dashboard__info" />-->
 <!--    </div>-->
-<!--    <div class="dashboard__status" v-if="dashboard?.statuses">-->
-<!--      <h3 class="dashboard__status-title">Статусы</h3>-->
-<!--      <ul class="dashboard__status-list">-->
-<!--        <DashboardStatusRows :statuses="dashboard?.statuses" />-->
-<!--      </ul>-->
-<!--    </div>-->
+    <div class="dashboard__status" v-if="dashboard?.statuses">
+      <h3 class="dashboard__status-title">Статусы</h3>
+      <ul class="dashboard__status-list">
+        <DashboardStatusRows :statuses="dashboard?.statuses" />
+      </ul>
+    </div>
   </AppLayout>
 </template>
 
