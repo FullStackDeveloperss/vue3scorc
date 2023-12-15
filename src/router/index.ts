@@ -4,6 +4,7 @@ import { storeToRefs } from 'pinia'
 import { createRouter, createWebHistory } from 'vue-router'
 import { useWindowSize } from '@vueuse/core'
 import { useRootStore } from '@/stores/root'
+import { log10 } from 'chart.js/helpers'
 const { width } = useWindowSize();
 
 const router = createRouter({
@@ -27,6 +28,8 @@ const router = createRouter({
 
 				if (user.value) {
 					next('/')
+				} else {
+					next()
 				}
 			}
 		},
