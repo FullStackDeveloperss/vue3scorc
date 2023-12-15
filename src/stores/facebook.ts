@@ -69,9 +69,16 @@ export const useFacebookStore = defineStore('facebook', () => {
     }
 
     const removeProfile = async (d: Datum) => {
-        const data = {
-            profile_id: d.id,
+        const data = {}
+
+        if (d) {
+            if (d instanceof Array) {
+                data.profile_ids = d.join(',')
+            } else {
+                data.profile_id = d.id
+            }
         }
+
         await axios.post('facebook/remove', data)
         await getFacebookData()
     }

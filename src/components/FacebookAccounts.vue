@@ -4,28 +4,65 @@ import { useFacebookStore } from '@/stores/facebook'
 import type { Datum } from '@/types/facebook'
 import { useWindowSize } from '@vueuse/core'
 import Checkbox from 'primevue/checkbox'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 const facebookStore = useFacebookStore()
+const { downloadFile } = storeToRefs(facebookStore)
 
-defineProps<{ data: Datum[] }>()
+const props = defineProps<{ data: Datum[] }>()
 
 const { width } = useWindowSize()
 
-const all = ref<boolean>(false)
+const selected = ref([])
+const selectedAll = computed( {
+    get() {
+        return selected.value.length === props.data.length
+    },
+    set (value) {
+        const selectedId = []
+        if (value) {
+            props.data.forEach( item => {
+                selectedId.push(item.id)
+            })
+        }
+
+        selected.value = selectedId
+    }
+})
+
+const downloadSelected = async () => {
+    await facebookStore.downloadFile(selected.value)
+}
+
+const removeSelected = async () => {
+    await facebookStore.removeProfile(selected.value)
+}
 </script>
 
 <template>
     <div class="facebook__inner" v-if="width > 743">
-        <h3 class="facebook__inner-title">Аккаунты</h3>
+        <div class="facebook-table__header">
+            <h3 class="facebook__inner-title">Аккаунты</h3>
+
+            <div class="facebook-table__buttons" v-if="selected.length">
+                <button class="facebook-table__btn facebook-table__btn--info" @click="downloadSelected">
+                    <img src="/icons/download.svg" alt="">
+                    скачать
+                </button>
+                <button class="facebook-table__btn facebook-table__btn--danger" @click="removeSelected">
+                    <img src="/icons/delete.svg" alt="">
+                    удалить
+                </button>
+            </div>
+        </div>
         <div class="facebook__inner-table">
             <table class="facebook__table">
                 <thead>
                     <tr class="facebook__table-tr">
                         <th class="facebook__table-th">
                             <Checkbox
-                                v-model="all"
+                                v-model="selectedAll"
                                 :binary="true"
                                 :pt="{
                                     root: { class: 'checkbox__root' },
@@ -46,8 +83,8 @@ const all = ref<boolean>(false)
                     <tr class="facebook__table-tr" v-for="d in data" :key="d.id">
                         <td class="facebook__table-td">
                             <Checkbox
-                                v-model="d.checked"
-                                :binary="true"
+                                v-model="selected"
+                                :value="d.id"
                                 :pt="{
                                     root: { class: 'checkbox__root' },
                                 }"
@@ -74,8 +111,7 @@ const all = ref<boolean>(false)
                         <td class="facebook__table-td">
                             {{ d.data.days }}
                         </td>
-                        <td
-                            class="facebook__table-td"
+                        <td class="facebook__table-td"
                             :class="d.status === 1 ? 'facebook__table-td_green' : 'facebook__table-td_red'"
                         >
                             {{ d.status === 1 ? 'Включен' : 'Выключен' }}
@@ -138,7 +174,7 @@ const all = ref<boolean>(false)
     <div class="facebook__adaptive-inner" v-else>
         <div class="facebook__adaptive-checkbox">
             <Checkbox
-                v-model="all"
+                v-model="selectedAll"
                 :binary="true"
                 :pt="{
                     root: { class: 'checkbox__root' },
@@ -147,10 +183,23 @@ const all = ref<boolean>(false)
             />
             <span class="facebook__adaptive-text">Выбрать все</span>
         </div>
+        <div class="facebook__adaptive-checkbox" v-if="selected.length">
+            <div class="facebook-table__buttons" >
+                <button class="facebook-table__btn facebook-table__btn--info" @click="downloadSelected">
+                    <img src="/icons/download.svg" alt="">
+                    скачать
+                </button>
+                <button class="facebook-table__btn facebook-table__btn--danger" @click="removeSelected">
+                    <img src="/icons/delete.svg" alt="">
+                    удалить
+                </button>
+            </div>
+        </div>
         <div class="facebook__adaptive-acc" v-for="d in data" :key="d.id">
             <div class="facebook__adaptive-info">
                 <Checkbox
-                    v-model="d.id"
+                    v-model="selected"
+                    :value="d.id"
                     :pt="{
                         root: { class: 'checkbox__root' },
                     }"
@@ -250,7 +299,6 @@ const all = ref<boolean>(false)
         line-height: 28px;
         letter-spacing: 0.18px;
         color: #091c31;
-        margin-bottom: 25px;
     }
 
     &__inner-btn {
@@ -412,6 +460,38 @@ const all = ref<boolean>(false)
 
         &_red {
             color: #e0281b;
+        }
+    }
+}
+
+.facebook-table {
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        margin-bottom: 25px;
+    }
+
+    &__buttons {
+        display: flex;
+        gap: 10px;
+    }
+    &__btn {
+        font-size: 14px;
+        line-height: 1;
+        color: #fff;
+        border-radius: 6px;
+        padding: 3px 10px;
+        display: flex;
+        gap: 5px;
+        align-items: center;
+
+        &--info {
+            background: #0067d5;
+        }
+
+        &--danger {
+            background: #e0281b;
         }
     }
 }

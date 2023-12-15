@@ -74,9 +74,11 @@ const logout = (): void => {
 	@media only screen and (max-width: 743px) and (min-width: 320px) {
 		margin-left: 0;
 		width: 100%;
+        position: fixed;
 	}
 
 	&__close {
+        position: absolute;
 		margin-left: 118px;
 		width: calc(100% - 118px);
 

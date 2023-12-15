@@ -60,7 +60,7 @@ const logi = ref('')
 					<span class="facebook__add-text">Фильтр</span>
 					<div class="facebook__add-item">
 						<div class="facebook__add-dropdown">
-							<Dropdown v-model="selectedStatus" icon="none" :options="status" optionLabel="name" placeholder="чекпоинт"
+							<Dropdown v-model="selectedStatus" icon="none" :options="statuses" optionLabel="name" placeholder="чекпоинт"
 								unstyled
 								:pt="{ root: { class: 'status__root' }, trigger: { class: 'status__trigger' }, panel: { class: 'status__panel' }, item: { class: 'status__item' }, input: { class: 'status__input' } }" />
 							<span class="facebook__add-span">Статус:</span>

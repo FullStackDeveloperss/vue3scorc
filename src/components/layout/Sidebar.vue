@@ -23,6 +23,8 @@ import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
 import type { Dashboard } from '@/types/dashboard'
+import { OverlayScrollbarsComponent } from "overlayscrollbars-vue";
+import 'overlayscrollbars/overlayscrollbars.css';
 
 const isDark = useDark({
     valueDark: 'dark',
@@ -49,8 +51,7 @@ const { isCloseSidebar } = storeToRefs(rootStore)
 </script>
 
 <template>
-    <div>
-        <perfect-scrollbar class="sidebar" :class="{ 'sidebar__close': isCloseSidebar }">
+    <OverlayScrollbarsComponent class="sidebar" :class="{ 'sidebar__close': isCloseSidebar }">
             <div class="sidebar__logo" v-if="!isDark">
                 <img v-if="!isCloseSidebar" src="/images/logo-dashboard.png" width="228" height="46">
                 <img v-else src="/images/logo-dashboard-close.png" width="46" height="46">
@@ -75,9 +76,9 @@ const { isCloseSidebar } = storeToRefs(rootStore)
                             </div>
                             <div class="sidebar__main-item">
                                 <div class="sidebar__main-nums">
-								<span class="sidebar__main-num sidebar__main-num_red">
-                                    {{ dashboard ? dashboard?.total_profiles - dashboard?.valid : 0 }}
-                                </span>
+                        <span class="sidebar__main-num sidebar__main-num_red">
+                            {{ dashboard ? dashboard?.total_profiles - dashboard?.valid : 0 }}
+                        </span>
                                     <span class="sidebar__main-num sidebar__main-num_green">{{ dashboard?.valid || 0
                                         }}</span>
                                 </div>
@@ -202,39 +203,18 @@ const { isCloseSidebar } = storeToRefs(rootStore)
                     </ul>
                 </div>
             </nav>
-        </perfect-scrollbar>
-    </div>
+    </OverlayScrollbarsComponent>
 </template>
 
 <style lang="scss">
-@import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css';
-
-.ps {
-    .ps__rail-y > .ps__thumb-y,
-    .ps__rail-y:hover > .ps__thumb-y,
-    .ps__rail-y:focus > .ps__thumb-y,
-    .ps__rail-y.ps--clicking .ps__thumb-y {
-        background: #0067d5;
-        width: 8px;
-        border-radius: 4px;
-    }
-
-    .ps__rail-y:hover,
-    .ps__rail-y:focus,
-    .ps__rail-y.ps--clicking {
-        background: none;
-        width: 8px;
-    }
-}
-
-
-.ps__thumb-y {
+.os-scrollbar .os-scrollbar-handle,
+.os-scrollbar .os-scrollbar-handle:hover{
     background: #0067d5;
 }
 
 .sidebar {
     position: fixed;
-    height: 100%;
+    height: 100vh;
     background-color: #F8F9FB;
     border-right: 1px solid #EEE;
     max-width: 300px;
@@ -250,11 +230,11 @@ const { isCloseSidebar } = storeToRefs(rootStore)
     }
 
     @media only screen and (max-width: 743px) and (min-width: 320px) {
-        position: absolute;
+        position: fixed;
         transform: translateY(60px);
         max-width: 100%;
         padding: 20px 10px;
-        min-height: 100vh;
+        height: calc(100vh - 60px);
     }
 
     &__close {
