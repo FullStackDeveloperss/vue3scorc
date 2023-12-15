@@ -151,7 +151,7 @@ watch(selectedCaptcha, async () => {
                         <InputSwitch v-model="fields.worm_status" />
                     </div>
                     <div class="farm__item" v-if="fields.worm_status === true">
-                        <span class="farm__text">Потоки Warm</span>
+                        <span class="farm__text">Потоки Worm</span>
                         <Slider v-model="fields.worm_threads_count" :min="0" :max="1000" />
                     </div>
                     <div class="farm__item">
@@ -168,7 +168,7 @@ watch(selectedCaptcha, async () => {
                     </div>
                     <div class="farm__item" v-if="fields.chat_bot === true">
                         <span class="farm__text">Потоки</span>
-                        <Slider v-model="fields.chat_bot_threads" :min="0" :max="100" />
+                        <Slider v-model="fields.chat_bot_threads" :min="0" :max="1000" />
                     </div>
                     <div class="farm__item">
                         <span class="farm__text">Chat Bot Web</span>
