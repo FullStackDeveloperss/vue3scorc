@@ -5,6 +5,8 @@ import { useDark, useWindowSize } from '@vueuse/core'
 import { onBeforeMount, reactive, ref } from 'vue'
 import axios from 'axios'
 import { setFields } from '@/helpers'
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
 
 const isDark = useDark({
     valueDark: 'dark',
@@ -27,11 +29,17 @@ onBeforeMount(async () => {
     }
 })
 
+const userStore = useUserStore()
+
 const sendingData = ref(false)
 const saveProfileSettings = async () => {
     sendingData.value = true
     try {
         const res = await axios.post('profile/set', dataLogin.value)
+
+        // TODO: username need only for document title, on change this method generate title remove username from this and store
+        userStore.setUserName(dataLogin.value.name)
+        document.title = dataLogin.value.name
     } catch (error) {
         console.log(error)
     }

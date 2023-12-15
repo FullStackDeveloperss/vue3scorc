@@ -28,7 +28,12 @@ export const useUserStore = defineStore(
                     userName: res.data.name,
                 }
 
+                userName.value = res.data.name
+
                 localStorage.setItem('token', user.value.token)
+                localStorage.setItem('user', JSON.stringify(user.value))
+                localStorage.setItem('userName', res.data.name)
+
 
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + user.value.token
 
@@ -47,12 +52,21 @@ export const useUserStore = defineStore(
             delete axios.defaults.headers.common['Authorization']
         }
 
+        // TODO: username need only for document title, on change this method generate title remove username from this and ProfileData.vue
+        const userName = ref<string | null>(null)
+        const setUserName = name => {
+            userName.value = name
+            localStorage.setItem('userName', name)
+        }
+
         return {
             user,
+            userName,
             login,
             status,
             loading,
             logout,
+            setUserName
         }
     },
     { persist: true },

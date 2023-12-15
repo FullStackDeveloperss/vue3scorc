@@ -41,7 +41,7 @@ const { isCloseSidebar } = storeToRefs(rootStore)
 	}
 
 	@media only screen and (max-width: 743px) and (min-width: 320px) {
-		padding: 20px 20px 36px 104px;
+		padding: 80px 20px 36px 104px;
 	}
 
 	&__close {
@@ -61,7 +61,7 @@ const { isCloseSidebar } = storeToRefs(rootStore)
 		}
 
 		@media only screen and (max-width: 743px) and (min-width: 320px) {
-			padding: 20px 20px 36px;
+			padding: 80px 20px 36px;
 		}
 	}
 }
