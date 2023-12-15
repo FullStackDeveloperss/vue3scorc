@@ -41,7 +41,6 @@ const getDashboardInfo = async () => {
 }
 
 onMounted(() => {
-    console.log(321)
     getDashboardInfo()
 })
 

@@ -20,6 +20,14 @@ const router = createRouter({
 			component: () => import('@/views/Login.vue'),
 			meta: {
 				layout: 'EmptyLayout'
+			},
+			beforeEnter: (to, from, next) => {
+				const userStore = useUserStore()
+				const { user } = storeToRefs(userStore)
+
+				if (user.value) {
+					next('/')
+				}
 			}
 		},
 		{
@@ -208,7 +216,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
 	const userStore = useUserStore()
 	const { user } = storeToRefs(userStore)
-	console.log('log', user.value)
+	console.log('1 log on change route', user.value)
+	console.log('2 log on change route from', from)
+	console.log('3 log on change to', to)
 	const publicView = ['/login']
 	const authRequired = !publicView.includes(to.path)
 	if (authRequired && !user.value) {

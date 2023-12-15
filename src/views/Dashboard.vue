@@ -53,52 +53,52 @@ onBeforeMount(getDashboardInfo);
       />
     </div>
 <!--    <DashboardStatisticMain />-->
-<!--    <div class="dashboard__content">-->
-<!--      <DashboardCard-->
-<!--        src="/icons/all-proxy.svg"-->
-<!--        alt="всего прокси"-->
-<!--        :num="40"-->
-<!--        text="всего прокси"-->
-<!--        class="dashboard__grid"-->
-<!--      />-->
-<!--      <DashboardCard-->
-<!--        src="/icons/valid-proxy.svg"-->
-<!--        alt="валидных прокси"-->
-<!--        :num="36"-->
-<!--        text="валидных прокси"-->
-<!--        class="dashboard__grid"-->
-<!--      />-->
-<!--      <DashboardCard-->
-<!--        src="/icons/delete-proxy.svg"-->
-<!--        alt="отлетело прокси"-->
-<!--        :num="4"-->
-<!--        text="отлетело прокси"-->
-<!--        class="dashboard__grid"-->
-<!--      />-->
-<!--      <DashboardCard-->
-<!--        src="/icons/all-accounts.svg"-->
-<!--        alt="всего аккаунтов"-->
-<!--        :num="dashboard?.total_profiles"-->
-<!--        text="всего аккаунтов"-->
-<!--        class="dashboard__grid"-->
-<!--      />-->
-<!--      <DashboardCard-->
-<!--        src="/icons/valid-accounts.svg"-->
-<!--        alt="валидных аккаунтов"-->
-<!--        :num="dashboard?.valid"-->
-<!--        text="валидных аккаунтов"-->
-<!--        class="dashboard__grid"-->
-<!--      />-->
-<!--      <DashboardCard-->
-<!--        src="/icons/delete-accounts.svg"-->
-<!--        alt="отлетело аккаунтов"-->
-<!--        :num="dashboard?.invalid"-->
-<!--        text="отлетело аккаунтов"-->
-<!--        class="dashboard__grid"-->
-<!--      />-->
+    <div class="dashboard__content">
+      <DashboardCard
+        src="/icons/all-proxy.svg"
+        alt="всего прокси"
+        :num="40"
+        text="всего прокси"
+        class="dashboard__grid"
+      />
+      <DashboardCard
+        src="/icons/valid-proxy.svg"
+        alt="валидных прокси"
+        :num="36"
+        text="валидных прокси"
+        class="dashboard__grid"
+      />
+      <DashboardCard
+        src="/icons/delete-proxy.svg"
+        alt="отлетело прокси"
+        :num="4"
+        text="отлетело прокси"
+        class="dashboard__grid"
+      />
+      <DashboardCard
+        src="/icons/all-accounts.svg"
+        alt="всего аккаунтов"
+        :num="dashboard?.total_profiles"
+        text="всего аккаунтов"
+        class="dashboard__grid"
+      />
+      <DashboardCard
+        src="/icons/valid-accounts.svg"
+        alt="валидных аккаунтов"
+        :num="dashboard?.valid"
+        text="валидных аккаунтов"
+        class="dashboard__grid"
+      />
+      <DashboardCard
+        src="/icons/delete-accounts.svg"
+        alt="отлетело аккаунтов"
+        :num="dashboard?.invalid"
+        text="отлетело аккаунтов"
+        class="dashboard__grid"
+      />
 <!--      <DashboardStatisticAccounts class="dashboard__grid" v-if="width > 1279" />-->
 <!--      <DashboardStatisticActive class="dashboard__grid" v-if="width > 1279" />-->
-<!--    </div>-->
+    </div>
 <!--    <div class="dashboard__item" v-if="width < 1280">-->
 <!--      <DashboardStatisticAccounts class="dashboard__info" />-->
 <!--      <DashboardStatisticActive class="dashboard__info" />-->
