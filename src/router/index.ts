@@ -222,6 +222,7 @@ router.beforeEach((to, from, next) => {
 	console.log('1 log on change route', user.value)
 	console.log('2 log on change route from', from)
 	console.log('3 log on change to', to)
+	document.title = user.value.name
 	const publicView = ['/login']
 	const authRequired = !publicView.includes(to.path)
 	if (authRequired && !user.value) {
