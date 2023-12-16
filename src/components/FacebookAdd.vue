@@ -8,6 +8,7 @@ import AccordionTab from 'primevue/accordiontab'
 import Dropdown from 'primevue/dropdown'
 import { computed, onBeforeMount, ref } from 'vue'
 import axios from 'axios'
+import { useToast } from 'primevue/usetoast'
 
 onBeforeMount(async () => {
     const responseStatus = await axios.post("stats/info");
@@ -38,6 +39,25 @@ const newStatus = ref([
 ])
 
 const logi = ref('')
+
+const toast = useToast()
+const changeStatus = async () => {
+    if (!selectedNewStatus.value || !selectedNewStatus.value) {
+        toast.add({
+            severity: 'info',
+            summary: ``,
+            detail: "Заполните необходимые поля",
+            life: 3000
+        })
+
+        return false
+    }
+
+    const res = await axios.post("facebook/mass-change-status", {
+        status_from: selectedNewStatus.value.value,
+        status_to: selectedNewStatus.value.value
+    });
+}
 </script>
 
 <template>
@@ -62,7 +82,18 @@ const logi = ref('')
 						<div class="facebook__add-dropdown">
 							<Dropdown v-model="selectedStatus" icon="none" :options="statuses" optionLabel="name" placeholder="чекпоинт"
 								unstyled
-								:pt="{ root: { class: 'status__root' }, trigger: { class: 'status__trigger' }, panel: { class: 'status__panel' }, item: { class: 'status__item' }, input: { class: 'status__input' } }" />
+								:pt="{
+                                    root: { class: 'status__root' },
+                                    trigger: { class: 'status__trigger' },
+                                    panel: { class: 'status__panel' },
+                                    item: { class: 'status__item' },
+                                    input: { class: 'status__input' },
+                                    wrapper: { style: {
+                                         maxHeight: '200px',
+                                         overflow: 'auto'
+                                    }}
+                                }"
+                            />
 							<span class="facebook__add-span">Статус:</span>
 						</div>
 
@@ -99,7 +130,7 @@ const logi = ref('')
                                                   panel: { class: 'now__panel' },
                                                   item: { class: 'now__item' },
                                                   input: { class: 'now__input' },
-                                                  wrapper: {style: {
+                                                  wrapper: { style: {
                                                       maxHeight: '200px',
                                                       overflow: 'auto'
                                                   }}
@@ -127,7 +158,8 @@ const logi = ref('')
 									<span class="facebook__add-span">Новый статус:</span>
 								</div>
 							</div>
-							<ButtonMain text="Изменить" class="facebook__add-edit" />
+                            <Toast />
+							<ButtonMain text="Изменить" class="facebook__add-edit" @click="changeStatus" />
 						</div>
 					</div>
 				</div>
@@ -362,6 +394,34 @@ const logi = ref('')
     &__arrow {
         color: #000;
     }
+}
+
+:deep(.now__input, .new__input) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+:deep(.new__input) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+:deep(.status__input) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+:deep(.now__trigger) {
+    flex-shrink: 0;
+}
+:deep(.status__trigger) {
+    flex-shrink: 0;
+}
+:deep(.status__trigger) {
+    flex-shrink: 0;
 }
 
 .dark .facebook {
