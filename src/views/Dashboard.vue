@@ -6,6 +6,7 @@ import DashboardStatisticMain from "@/components/DashboardStatisticMain.vue";
 import DashboardStatusRows from "@/components/DashboardStatusRows.vue";
 import AppLayout from "@/components/layout/AppLayout.vue";
 import type { Dashboard } from "@/types/dashboard";
+import type { ProxyDashboard } from "@/types/proxy";
 import type { Date } from "@/types/general";
 import { useWindowSize } from "@vueuse/core";
 import axios from "axios";
@@ -15,13 +16,16 @@ import { onBeforeMount, ref } from "vue";
 const { width } = useWindowSize();
 
 const dashboard = ref<Dashboard | null>(null);
+const dashboardProxy = ref<ProxyDashboard | null>(null)
 const selectedDate = ref<string>("");
 const dates = ref<Date[]>([{ name: "Сегодня" }]);
 
 const getDashboardInfo = async () => {
   try {
     const res = await axios.post("stats/info");
+    const resProxy = await axios.post("data/proxy/list");
     dashboard.value = res.data;
+    dashboardProxy.value = resProxy.data;
   } catch (error) {
     console.log(error);
   }
@@ -57,21 +61,21 @@ onBeforeMount(getDashboardInfo);
       <DashboardCard
         src="/icons/all-proxy.svg"
         alt="всего прокси"
-        :num="40"
+        :num="dashboardProxy?.total"
         text="всего прокси"
         class="dashboard__grid"
       />
       <DashboardCard
         src="/icons/valid-proxy.svg"
         alt="валидных прокси"
-        :num="36"
+        :num="dashboardProxy?.total_valid"
         text="валидных прокси"
         class="dashboard__grid"
       />
       <DashboardCard
         src="/icons/delete-proxy.svg"
         alt="отлетело прокси"
-        :num="4"
+        :num="dashboardProxy?.total_invalid"
         text="отлетело прокси"
         class="dashboard__grid"
       />
