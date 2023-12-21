@@ -6,6 +6,7 @@ import { useDark } from '@vueuse/core'
 import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
 import Dropdown from 'primevue/dropdown'
+import Toast from 'primevue/toast'
 import { computed, onBeforeMount, ref } from 'vue'
 import axios from 'axios'
 import { useToast } from 'primevue/usetoast'
@@ -271,6 +272,10 @@ const changeStatus = async () => {
 	&__add-dropdown {
 		position: relative;
 
+        @media only screen and (max-width: 829px) and (min-width: 320px) {
+
+        }
+
 		@media only screen and (max-width: 429px) and (min-width: 320px) {
 			width: 100%;
 		}
@@ -364,12 +369,18 @@ const changeStatus = async () => {
 
 		@media only screen and (max-width: 829px) and (min-width: 320px) {
 			max-width: 100%;
+            display: flex;
+            flex-wrap: wrap;
 		}
 
 		@media only screen and (max-width: 429px) and (min-width: 320px) {
 			flex-direction: column;
 			align-items: flex-start;
 			gap: 20px;
+
+            .facebook__add-dropdown {
+                width: 100%;
+            }
 		}
 	}
 

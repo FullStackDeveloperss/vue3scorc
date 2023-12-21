@@ -114,16 +114,19 @@ export const useFacebookStore = defineStore('facebook', () => {
         //     url: route.params.table,
         // }
 
+        const data = {}
+
         if (id) {
             if (id instanceof Array) {
-                id.join()
+                data.profile_ids = id.join(',')
                 fileName = 'profiles-selected.xlsx'
             } else {
+                data.profile_id = id
                 fileName = 'profiles-' + id + '.xlsx'
             }
         }
 
-        const res = await axios.post('facebook/download', {
+        const res = await axios.post('facebook/download', data, {
             responseType: 'blob',
         })
         var fileURL = window.URL.createObjectURL(new Blob([res.data]))
