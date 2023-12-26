@@ -19,7 +19,7 @@ export const useFacebookStore = defineStore('facebook', () => {
         search_by_login_query: '',
     })
     const page = ref(1)
-    const sortOrder = ref<string>('')
+    const sortOrder = ref<string>('desc')
     const selectedRegister = ref<{ name: string; value: string } | null>(null)
     const sortRegister = ref([
         { name: 'Статус', value: 'status' },

@@ -10,6 +10,7 @@ import Toast from 'primevue/toast'
 import { computed, onBeforeMount, ref } from 'vue'
 import axios from 'axios'
 import { useToast } from 'primevue/usetoast'
+import { useFacebookStore } from '@/stores/facebook'
 
 onBeforeMount(async () => {
     const responseStatus = await axios.post("stats/info");
@@ -40,6 +41,7 @@ const newStatus = ref([
 ])
 
 const logi = ref('')
+const facebookStore = useFacebookStore()
 
 const toast = useToast()
 const changeStatus = async () => {
@@ -58,6 +60,8 @@ const changeStatus = async () => {
         status_from: selectedNewStatus.value.value,
         status_to: selectedNewStatus.value.value
     });
+
+    facebookStore.getFacebookDataBySort()
 }
 </script>
 

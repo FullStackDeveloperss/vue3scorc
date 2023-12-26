@@ -33,7 +33,7 @@ onMounted(facebookStore.getFacebookData)
 
 function changePage(e: any) {
     page.value = e?.page + 1
-    facebookStore.getFacebookData()
+    facebookStore.getFacebookDataBySort()
 }
 
 watch(
