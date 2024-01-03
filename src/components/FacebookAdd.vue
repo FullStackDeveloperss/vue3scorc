@@ -6,31 +6,27 @@ import { useDark } from '@vueuse/core'
 import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
 import Dropdown from 'primevue/dropdown'
-import Toast from 'primevue/toast'
-import { computed, onBeforeMount, onBeforeUnmount, ref } from 'vue'
+import { computed, onBeforeMount, ref, watch } from 'vue'
 import axios from 'axios'
 import { useToast } from 'primevue/usetoast'
+import { storeToRefs } from 'pinia'
 import { useFacebookStore } from '@/stores/facebook'
+import Toast from 'primevue/toast'
 
-const getStatusesInfo = async () => {
-    const responseStatus = await axios.post("stats/info");
+const facebookStore = useFacebookStore()
+const { filterByStatus } = storeToRefs(facebookStore)
+
+onBeforeMount(async () => {
+    const responseStatus = await axios.post('stats/info')
     const { valid, invalid } = responseStatus.data.statuses
 
-    statuses.value = [...valid, ...invalid].map(item => ({
+    statuses.value = [...valid, ...invalid].map((item) => ({
         name: item.text,
-        value: item.status
+        value: item.status,
     }))
-}
-
-onBeforeMount(getStatusesInfo);
-
-const updateStatuses = setInterval(() => getStatusesInfo(), 10000);
-onBeforeUnmount(() => clearInterval(updateStatuses))
+})
 
 const statuses = ref([])
-
-const selectedStatus = ref<string>('')
-
 
 const selectedGeo = ref<string>('')
 const geo = ref([
@@ -38,7 +34,7 @@ const geo = ref([
 ])
 
 const selectedNowStatus = ref<string>('')
-const nowStatus = computed(() => statuses.value.filter(item => item.value !== selectedNewStatus.value))
+const nowStatus = computed(() => statuses.value.filter((item) => item.value !== selectedNewStatus.value))
 
 const selectedNewStatus = ref<string>('')
 const newStatus = ref([
@@ -46,7 +42,6 @@ const newStatus = ref([
 ])
 
 const logi = ref('')
-const facebookStore = useFacebookStore()
 
 const toast = useToast()
 const changeStatus = async () => {
@@ -54,20 +49,17 @@ const changeStatus = async () => {
         toast.add({
             severity: 'info',
             summary: ``,
-            detail: "Заполните необходимые поля",
-            life: 3000
+            detail: 'Заполните необходимые поля',
+            life: 3000,
         })
 
         return false
     }
 
-    const res = await axios.post("facebook/mass-change-status", {
+    const res = await axios.post('facebook/mass-change-status', {
         status_from: selectedNowStatus.value.value,
-        status_to: selectedNewStatus.value.value
-    });
-
-    facebookStore.getFacebookDataBySort()
-    getStatusesInfo()
+        status_to: selectedNewStatus.value.value,
+    })
 }
 </script>
 
@@ -76,8 +68,9 @@ const changeStatus = async () => {
 		<AccordionTab :pt="{
             headerAction: { class: 'accordion__headeraction' },
              content: { class: 'accordion__content' },
-              root: { class: 'accordion__tab' }
-             }">
+                root: { class: 'accordion__tab' },
+            }"
+        >
 			<template #header>
 				<div class="facebook__item">
 					<h3 class="facebook__subtitle">Дополнительно</h3>
@@ -91,7 +84,13 @@ const changeStatus = async () => {
 					<span class="facebook__add-text">Фильтр</span>
 					<div class="facebook__add-item">
 						<div class="facebook__add-dropdown">
-							<Dropdown v-model="selectedStatus" icon="none" :options="statuses" optionLabel="name" placeholder="чекпоинт"
+                            <Dropdown
+                                v-model="filterByStatus"
+                                @change="facebookStore.getFacebookData"
+                                icon="none"
+                                :options="statuses"
+                                optionLabel="name"
+                                placeholder="чекпоинт"
 								unstyled
 								:pt="{
                                     root: { class: 'status__root' },
@@ -101,8 +100,9 @@ const changeStatus = async () => {
                                     input: { class: 'status__input' },
                                     wrapper: { style: {
                                          maxHeight: '200px',
-                                         overflow: 'auto'
-                                    }}
+                                            overflow: 'auto',
+                                        },
+                                    },
                                 }"
                             />
 							<span class="facebook__add-span">Статус:</span>
@@ -143,9 +143,11 @@ const changeStatus = async () => {
                                                   input: { class: 'now__input' },
                                                   wrapper: { style: {
                                                       maxHeight: '200px',
-                                                      overflow: 'auto'
-                                                  }}
-                                              }" />
+                                                    overflow: 'auto',
+                                                },
+                                            },
+                                        }"
+                                    />
 									<span class="facebook__add-span">Текущий статус:</span>
 								</div>
 								<div class="facebook__add-dropdown">
@@ -163,9 +165,11 @@ const changeStatus = async () => {
                                                   input: { class: 'new__input' },
                                                   wrapper: {style: {
                                                       maxHeight: '200px',
-                                                      overflow: 'auto'
-                                                  }}
-                                              }" />
+                                                    overflow: 'auto',
+                                                },
+                                            },
+                                        }"
+                                    />
 									<span class="facebook__add-span">Новый статус:</span>
 								</div>
 							</div>
@@ -187,7 +191,7 @@ const changeStatus = async () => {
 		font-weight: 500;
 		line-height: 28px;
 		letter-spacing: 0.18px;
-		color: #091C31;
+        color: #091c31;
 	}
 
 	&__item {
@@ -228,11 +232,11 @@ const changeStatus = async () => {
 	}
 
 	&__add-text {
-		font-family: "Inter", sans-serif;
+        font-family: 'Inter', sans-serif;
 		font-style: normal;
 		font-weight: 500;
 		line-height: 21px;
-		color: #091C31;
+        color: #091c31;
 
 		&_add {
 			transform: translateY(10px);
@@ -282,10 +286,6 @@ const changeStatus = async () => {
 	&__add-dropdown {
 		position: relative;
 
-        @media only screen and (max-width: 829px) and (min-width: 320px) {
-
-        }
-
 		@media only screen and (max-width: 429px) and (min-width: 320px) {
 			width: 100%;
 		}
@@ -293,13 +293,13 @@ const changeStatus = async () => {
 
 	&__add-span {
 		position: absolute;
-		font-family: "Inter", sans-serif;
+        font-family: 'Inter', sans-serif;
 		font-weight: 500;
 		line-height: 21px;
 		top: 50%;
 		transform: translateY(-50%);
 		left: 8px;
-		color: #091C31;
+        color: #091c31;
 
 		@media only screen and (max-width: 1439px) and (min-width: 320px) {
 			display: none;
@@ -352,8 +352,8 @@ const changeStatus = async () => {
 		height: 44px;
 		justify-content: center;
 		border-radius: 10px;
-		background-color: #0067D5;
-		font-family: "Manrope", sans-serif;
+        background-color: #0067d5;
+        font-family: 'Manrope', sans-serif;
 		font-size: 15px;
 		font-weight: 400;
 		line-height: 22px;

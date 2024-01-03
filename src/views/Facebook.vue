@@ -33,7 +33,7 @@ onMounted(facebookStore.getFacebookData)
 
 function changePage(e: any) {
     page.value = e?.page + 1
-    facebookStore.getFacebookDataBySort()
+    facebookStore.getFacebookData()
 }
 
 watch(
@@ -65,7 +65,7 @@ const uploaderHandler = (event) => {
                 summary: `Ошибка`,
                 detail: error.message,
             })
-        }
+        },
     })
 }
 const downloadHandler = () => {
@@ -78,7 +78,7 @@ const downloadHandler = () => {
                 summary: `Ошибка`,
                 detail: error.message,
             })
-        }
+        },
     })
 }
 
@@ -183,9 +183,10 @@ const downloadHandler = () => {
                                 border="none"
                                 backgroundColor="#0067D5"
                                 @click="downloadHandler" />
-                    <input ref="inputFile" type='file' accept=".xlsx" hidden @change="uploaderHandler" />
-                    <ButtonIcon src="/icons/upload.svg"
-                                alt="Скачать"
+                    <input ref="inputFile" type="file" accept=".xlsx" hidden @change="uploaderHandler" />
+                    <ButtonIcon
+                        src="/icons/upload.svg"
+                        alt="Загрузить"
                                 border="none"
                                 backgroundColor="#0067D5"
                                 @click="$refs.inputFile.click()" />
@@ -263,7 +264,13 @@ const downloadHandler = () => {
                     </div>
                     <ButtonIcon src="/icons/play.svg" alt="Начать" border="none" backgroundColor="#0067D5" />
                     <ButtonIcon src="/icons/stop.svg" alt="Остановить" border="none" backgroundColor="#0067D5" />
-                    <ButtonIcon src="/icons/download.svg" alt="Скачать" border="none" backgroundColor="#0067D5" />
+                    <ButtonIcon
+                        src="/icons/download.svg"
+                        @click="downloadHandler"
+                        alt="Скачать"
+                        border="none"
+                        backgroundColor="#0067D5"
+                    />
                     <ButtonIcon src="/icons/upload.svg" alt="Загрузить" border="none" backgroundColor="#0067D5" />
                 </div>
             </div>
