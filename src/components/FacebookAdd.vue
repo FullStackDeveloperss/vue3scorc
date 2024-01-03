@@ -24,8 +24,14 @@ onBeforeMount(async () => {
         name: item.text,
         value: item.status,
     }))
+
+    validStatuses.value = [...valid].map((item) => ({
+        name: item.text,
+        value: item.status,
+    }))
 })
 
+const validStatuses = ref([])
 const statuses = ref([])
 
 const selectedGeo = ref<string>('')
@@ -88,7 +94,7 @@ const changeStatus = async () => {
                                 v-model="filterByStatus"
                                 @change="facebookStore.getFacebookData"
                                 icon="none"
-                                :options="statuses"
+                                :options="validStatuses"
                                 optionLabel="name"
                                 placeholder="чекпоинт"
 								unstyled

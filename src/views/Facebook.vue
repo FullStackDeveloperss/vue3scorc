@@ -155,10 +155,11 @@ const downloadHandler = () => {
                                 root: { class: 'sort__root' },
                                 trigger: { class: 'sort__trigger' },
                                 panel: { class: 'sort__panel' },
+                                wrapper: { class: 'sort__wrapper', style: 'max-height: 220px; overflow: auto;' },
                                 item: { class: 'sort__item' },
                                 input: { class: 'sort__input' },
                             }"
-                            @change="facebookStore.getFacebookData"
+                            @change="facebookStore.getFacebookDataBySort"
                         />
                         <span class="facebook__nav-span">На странице:</span>
                     </div>
