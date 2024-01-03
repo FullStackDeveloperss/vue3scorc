@@ -30,7 +30,7 @@ export const usePostingStore = defineStore(
         })
 
         const initWatch = () => {
-            startWatch(fields, 'posting')
+            startWatch(fields, 'templates-auto-control')
         }
 
         const getData = async () => {
