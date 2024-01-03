@@ -7,12 +7,12 @@ import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
 import Dropdown from 'primevue/dropdown'
 import Toast from 'primevue/toast'
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, onBeforeUnmount, ref } from 'vue'
 import axios from 'axios'
 import { useToast } from 'primevue/usetoast'
 import { useFacebookStore } from '@/stores/facebook'
 
-onBeforeMount(async () => {
+const getStatusesInfo = async () => {
     const responseStatus = await axios.post("stats/info");
     const { valid, invalid } = responseStatus.data.statuses
 
@@ -20,7 +20,12 @@ onBeforeMount(async () => {
         name: item.text,
         value: item.status
     }))
-})
+}
+
+onBeforeMount(getStatusesInfo);
+
+const updateStatuses = setInterval(() => getStatusesInfo(), 10000);
+onBeforeUnmount(() => clearInterval(updateStatuses))
 
 const statuses = ref([])
 
@@ -57,11 +62,12 @@ const changeStatus = async () => {
     }
 
     const res = await axios.post("facebook/mass-change-status", {
-        status_from: selectedNewStatus.value.value,
+        status_from: selectedNowStatus.value.value,
         status_to: selectedNewStatus.value.value
     });
 
     facebookStore.getFacebookDataBySort()
+    getStatusesInfo()
 }
 </script>
 

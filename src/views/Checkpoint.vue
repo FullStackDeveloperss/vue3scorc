@@ -108,7 +108,7 @@ const unselectStatus = status => {
                 </MultiSelect>
                 <div class="custom-multiselect__label-list">
                     <div class="custom-multiselect__token" v-for="item of selectedCheckpoint">
-                        <div class="custom-multiselect__selected-value">{{ item.name }}</div>
+                        <div class="custom-multiselect__selected-value">{{ item?.name }}</div>
                         <div class="custom-multiselect__selected-remove" @click="unselectStatus(item)">
                             <svg width="14"
                                  height="14"
