@@ -24,14 +24,8 @@ onBeforeMount(async () => {
         name: item.text,
         value: item.status,
     }))
-
-    validStatuses.value = [...valid].map((item) => ({
-        name: item.text,
-        value: item.status,
-    }))
 })
 
-const validStatuses = ref([])
 const statuses = ref([])
 
 const selectedGeo = ref<string>('')
@@ -94,9 +88,9 @@ const changeStatus = async () => {
                                 v-model="filterByStatus"
                                 @change="facebookStore.getFacebookData"
                                 icon="none"
-                                :options="validStatuses"
+                                :options="statuses"
                                 optionLabel="name"
-                                placeholder="чекпоинт"
+                                placeholder="статус"
 								unstyled
 								:pt="{
                                     root: { class: 'status__root' },
@@ -305,7 +299,7 @@ const changeStatus = async () => {
 		top: 50%;
 		transform: translateY(-50%);
 		left: 8px;
-        color: #091c31;
+		color: #091C31;
 
 		@media only screen and (max-width: 1439px) and (min-width: 320px) {
 			display: none;
@@ -358,8 +352,8 @@ const changeStatus = async () => {
 		height: 44px;
 		justify-content: center;
 		border-radius: 10px;
-        background-color: #0067d5;
-        font-family: 'Manrope', sans-serif;
+		background-color: #0067D5;
+		font-family: "Manrope", sans-serif;
 		font-size: 15px;
 		font-weight: 400;
 		line-height: 22px;
