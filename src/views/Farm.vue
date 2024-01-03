@@ -14,7 +14,6 @@ onBeforeMount(async () => {
     try {
         const res = await axios.post('setting/get', { code: 'general' })
         setFields(fields, res.data.fields)
-        selectedCaptcha.value = { name: res.data.fields.capthca_type }
     } catch (error) {
         console.log(error)
     }
