@@ -6,7 +6,6 @@ import { useWindowSize } from '@vueuse/core'
 import Checkbox from 'primevue/checkbox'
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import ArrowDown from '@/components/icons/ArrowDown.vue'
 
 const facebookStore = useFacebookStore()
 const { downloadFile } = storeToRefs(facebookStore)
@@ -73,7 +72,6 @@ const removeSelected = async () => {
                         </th>
                         <th class="facebook__table-th">№</th>
                         <th class="facebook__table-th">Аккаунт</th>
-                        <th class="facebook__table-th"></th>
                         <th class="facebook__table-th">Город</th>
                         <th class="facebook__table-th">Друзей</th>
                         <th class="facebook__table-th">Дней с рег.</th>
@@ -82,105 +80,93 @@ const removeSelected = async () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-for="d in data" :key="d.id">
-                        <tr class="facebook__table-tr" >
-                            <td class="facebook__table-td">
-                                <Checkbox
-                                    v-model="selected"
-                                    :value="d.id"
-                                    :pt="{
+                    <tr class="facebook__table-tr" v-for="d in data" :key="d.id">
+                        <td class="facebook__table-td">
+                            <Checkbox
+                                v-model="selected"
+                                :value="d.id"
+                                :pt="{
                                     root: { class: 'checkbox__root' },
                                 }"
-                                    class="facebook__table-checkbox"
-                                />
-                            </td>
-                            <td class="facebook__table-td">
+                                class="facebook__table-checkbox"
+                            />
+                        </td>
+                        <td class="facebook__table-td">
                             <span class="facebook__table-text">
                                 {{ d.id }}
                             </span>
-                            </td>
-                            <td class="facebook__table-td">
-                                <div class="facebook__table-account">
-                                    <img class="facebook__table-img" :src="d.image_url" />
-                                    <span class="facebook__table-text">{{ d.data.name }}</span>
-                                </div>
-                            </td>
-                            <td class="facebook__table-td">
-                                <ArrowDown class="facebook__arrow" @click="d.showFullInfo = !d.showFullInfo" />
-                            </td>
-                            <td class="facebook__table-td">
-                                {{ d.data.city }}
-                            </td>
-                            <td class="facebook__table-td">
-                                {{ d.data.friends }}
-                            </td>
-                            <td class="facebook__table-td">
-                                {{ d.data.days }}
-                            </td>
-                            <td class="facebook__table-td"
-                                :class="d.status === 1 ? 'facebook__table-td_green' : 'facebook__table-td_red'"
-                            >
-                                {{ d.status === 1 ? 'Включен' : 'Выключен' }}
-                            </td>
-                            <td class="facebook__table-td">
-                                <div class="facebook__table-btns">
-                                    <ButtonIcon
-                                        src="/icons/download.svg"
-                                        alt="Скачать"
-                                        border="none"
-                                        backgroundColor="#0067D5"
-                                        @click="facebookStore.downloadFile(d.id)"
-                                    />
-                                    <ButtonIcon
-                                        src="/icons/stop.svg"
-                                        alt="Остановить"
-                                        border="none"
-                                        backgroundColor="#0067D5"
-                                        @click="facebookStore.toggleStatus(d, 0)"
-                                        v-if="d.status === 1"
-                                    />
-                                    <ButtonIcon
-                                        src="/icons/play.svg"
-                                        alt="Начать"
-                                        border="none"
-                                        backgroundColor="#0067D5"
-                                        @click="facebookStore.toggleStatus(d, 1)"
-                                        v-else
-                                    />
-                                    <ButtonIcon
-                                        src="/icons/mouse-click.svg"
-                                        alt="Клик"
-                                        border="none"
-                                        backgroundColor="#16C050"
-                                        @click="facebookStore.toggleHandMode(d)"
-                                        v-if="d.hand_mode"
-                                    />
-                                    <ButtonIcon
-                                        src="/icons/mouse-click.svg"
-                                        alt="Клик"
-                                        border="none"
-                                        backgroundColor="#0067d5"
-                                        @click="facebookStore.toggleHandMode(d)"
-                                        v-else
-                                    />
-                                    <ButtonIcon
-                                        src="/icons/delete.svg"
-                                        alt="Удалить"
-                                        border="none"
-                                        backgroundColor="#E0281B"
-                                        @click="facebookStore.removeProfile(d)"
-                                    />
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="facebook__table-tr" v-show="d.showFullInfo">
-                            <td class="facebook__table-td" colspan="10" >
-                                <div class="user-info">
-                                    <div class="user-info__item" v-for="(value, key) in d.data"><b>{{ key }}:</b> {{ value }}</div>
-                                </div>
-                            </td>
-                        </tr>
-                    </template>
+                        </td>
+                        <td class="facebook__table-td">
+                            <div class="facebook__table-account">
+                                <img class="facebook__table-img" :src="d.image_url" />
+                                <span class="facebook__table-text">{{ d.data.name }}</span>
+                            </div>
+                        </td>
+                        <td class="facebook__table-td">
+                            {{ d.data.city }}
+                        </td>
+                        <td class="facebook__table-td">
+                            {{ d.data.friends }}
+                        </td>
+                        <td class="facebook__table-td">
+                            {{ d.data.days }}
+                        </td>
+                        <td class="facebook__table-td"
+                            :class="d.status === 1 ? 'facebook__table-td_green' : 'facebook__table-td_red'"
+                        >
+                            {{ d.status === 1 ? 'Включен' : 'Выключен' }}
+                        </td>
+                        <td class="facebook__table-td">
+                            <div class="facebook__table-btns">
+                                <ButtonIcon
+                                    src="/icons/download.svg"
+                                    alt="Скачать"
+                                    border="none"
+                                    backgroundColor="#0067D5"
+                                    @click="facebookStore.downloadFile(d.id)"
+                                />
+                                <ButtonIcon
+                                    src="/icons/stop.svg"
+                                    alt="Остановить"
+                                    border="none"
+                                    backgroundColor="#0067D5"
+                                    @click="facebookStore.toggleStatus(d, 0)"
+                                    v-if="d.status === 1"
+                                />
+                                <ButtonIcon
+                                    src="/icons/play.svg"
+                                    alt="Начать"
+                                    border="none"
+                                    backgroundColor="#0067D5"
+                                    @click="facebookStore.toggleStatus(d, 1)"
+                                    v-else
+                                />
+                                <ButtonIcon
+                                    src="/icons/mouse-click.svg"
+                                    alt="Клик"
+                                    border="none"
+                                    backgroundColor="#16C050"
+                                    @click="facebookStore.toggleHandMode(d)"
+                                    v-if="d.hand_mode"
+                                />
+                                <ButtonIcon
+                                    src="/icons/mouse-click.svg"
+                                    alt="Клик"
+                                    border="none"
+                                    backgroundColor="#0067d5"
+                                    @click="facebookStore.toggleHandMode(d)"
+                                    v-else
+                                />
+                                <ButtonIcon
+                                    src="/icons/delete.svg"
+                                    alt="Удалить"
+                                    border="none"
+                                    backgroundColor="#E0281B"
+                                    @click="facebookStore.removeProfile(d)"
+                                />
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -292,21 +278,6 @@ const removeSelected = async () => {
 </template>
 
 <style lang="scss" scoped>
-table {
-    max-width: 100%;
-}
-.user-info {
-    display: flex;
-    flex-direction: column;
-    gap: 10px 20px;
-
-    &__item {
-        //width: min(300px);
-        color: #091c31;
-        font-size: 16px;
-        line-height: 1.2;
-    }
-}
 .facebook {
     &__inner {
         padding: 24px 32px 36px;
