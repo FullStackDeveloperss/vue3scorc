@@ -56,10 +56,27 @@ const changeStatus = async () => {
         return false
     }
 
-    const res = await axios.post('facebook/mass-change-status', {
-        status_from: selectedNowStatus.value.value,
-        status_to: selectedNewStatus.value.value,
-    })
+    try {
+        const res = await axios.post('facebook/mass-change-status', {
+            status_from: selectedNowStatus.value.value,
+            status_to: selectedNewStatus.value.value,
+        })
+
+        toast.add({
+            severity: 'success',
+            summary: ``,
+            detail: 'Статус изменен',
+            life: 3000,
+        })
+    } catch (e) {
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Произошла ошибка',
+            life: 3000,
+        })
+    }
+
 }
 </script>
 
