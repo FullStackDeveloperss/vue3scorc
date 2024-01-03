@@ -33,7 +33,7 @@ onMounted(facebookStore.getFacebookData)
 
 function changePage(e: any) {
     page.value = e?.page + 1
-    facebookStore.getFacebookDataBySort()
+    facebookStore.getFacebookData()
 }
 
 watch(
@@ -65,7 +65,7 @@ const uploaderHandler = (event) => {
                 summary: `Ошибка`,
                 detail: error.message,
             })
-        }
+        },
     })
 }
 const downloadHandler = () => {
@@ -78,10 +78,9 @@ const downloadHandler = () => {
                 summary: `Ошибка`,
                 detail: error.message,
             })
-        }
+        },
     })
 }
-
 </script>
 
 <template>
@@ -113,7 +112,9 @@ const downloadHandler = () => {
                         </div>
                         <ButtonIcon
                             :border="`1px solid ${facebookStore.sortOrder === 'asc' ? '#0067D5' : '#BFC5CD'}`"
-                            :backgroundColor="facebookStore.sortOrder === 'asc' ? 'rgba(0, 103, 213, 0.1)' : 'transparent'"
+                            :backgroundColor="
+                                facebookStore.sortOrder === 'asc' ? 'rgba(0, 103, 213, 0.1)' : 'transparent'
+                            "
                             src="/icons/arrow-up.svg"
                             alt="Вверх"
                             v-if="!isDark"
@@ -121,7 +122,9 @@ const downloadHandler = () => {
                         />
                         <ButtonIcon
                             :border="`1px solid ${facebookStore.sortOrder === 'asc' ? '#0067D5' : '#BFC5CD'}`"
-                            :backgroundColor="facebookStore.sortOrder === 'asc' ? 'rgba(0, 103, 213, 0.1)' : 'transparent'"
+                            :backgroundColor="
+                                facebookStore.sortOrder === 'asc' ? 'rgba(0, 103, 213, 0.1)' : 'transparent'
+                            "
                             src="/icons/arrow-up-dark.svg"
                             alt="Вверх"
                             v-else
@@ -129,7 +132,9 @@ const downloadHandler = () => {
                         />
                         <ButtonIcon
                             :border="`1px solid ${facebookStore.sortOrder === 'desc' ? '#0067D5' : '#BFC5CD'}`"
-                            :backgroundColor="facebookStore.sortOrder === 'desc' ? 'rgba(0, 103, 213, 0.1)' : 'transparent'"
+                            :backgroundColor="
+                                facebookStore.sortOrder === 'desc' ? 'rgba(0, 103, 213, 0.1)' : 'transparent'
+                            "
                             src="/icons/arrow-down-sort.svg"
                             alt="Вниз"
                             v-if="!isDark"
@@ -137,7 +142,9 @@ const downloadHandler = () => {
                         />
                         <ButtonIcon
                             :border="`1px solid ${facebookStore.sortOrder === 'desc' ? '#0067D5' : '#BFC5CD'}`"
-                            :backgroundColor="facebookStore.sortOrder === 'desc' ? 'rgba(0, 103, 213, 0.1)' : 'transparent'"
+                            :backgroundColor="
+                                facebookStore.sortOrder === 'desc' ? 'rgba(0, 103, 213, 0.1)' : 'transparent'
+                            "
                             src="/icons/arrow-down-sort-dark.svg"
                             alt="Вниз"
                             v-else
@@ -178,17 +185,21 @@ const downloadHandler = () => {
                         backgroundColor="#0067D5"
                         @click="facebookStore.setActivityAll(0)"
                     />
-                    <ButtonIcon src="/icons/download.svg"
-                                alt="Скачать"
-                                border="none"
-                                backgroundColor="#0067D5"
-                                @click="downloadHandler" />
-                    <input ref="inputFile" type='file' accept=".xlsx" hidden @change="uploaderHandler" />
-                    <ButtonIcon src="/icons/upload.svg"
-                                alt="Скачать"
-                                border="none"
-                                backgroundColor="#0067D5"
-                                @click="$refs.inputFile.click()" />
+                    <ButtonIcon
+                        src="/icons/download.svg"
+                        alt="Скачать"
+                        border="none"
+                        backgroundColor="#0067D5"
+                        @click="downloadHandler"
+                    />
+                    <input ref="inputFile" type="file" accept=".xlsx" hidden @change="uploaderHandler" />
+                    <ButtonIcon
+                        src="/icons/upload.svg"
+                        alt="Загрузить"
+                        border="none"
+                        backgroundColor="#0067D5"
+                        @click="$refs.inputFile.click()"
+                    />
                     <Toast />
                 </div>
             </div>
@@ -263,7 +274,13 @@ const downloadHandler = () => {
                     </div>
                     <ButtonIcon src="/icons/play.svg" alt="Начать" border="none" backgroundColor="#0067D5" />
                     <ButtonIcon src="/icons/stop.svg" alt="Остановить" border="none" backgroundColor="#0067D5" />
-                    <ButtonIcon src="/icons/download.svg" alt="Скачать" border="none" backgroundColor="#0067D5" />
+                    <ButtonIcon
+                        src="/icons/download.svg"
+                        @click="downloadHandler"
+                        alt="Скачать"
+                        border="none"
+                        backgroundColor="#0067D5"
+                    />
                     <ButtonIcon src="/icons/upload.svg" alt="Загрузить" border="none" backgroundColor="#0067D5" />
                 </div>
             </div>

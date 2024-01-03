@@ -18,8 +18,11 @@ export const useFacebookStore = defineStore('facebook', () => {
         search_by_login: false,
         search_by_login_query: '',
     })
+
+    const filterByStatus = ref('')
+
     const page = ref(1)
-    const sortOrder = ref<string>('desc')
+    const sortOrder = ref<string>('')
     const selectedRegister = ref<{ name: string; value: string } | null>(null)
     const sortRegister = ref([
         { name: 'Статус', value: 'status' },
@@ -42,6 +45,11 @@ export const useFacebookStore = defineStore('facebook', () => {
             per_page: selectedSort.value.value,
             filterBy: filterBy.value,
         }
+
+        if (filterByStatus.value?.value) {
+            data.status = filterByStatus.value.value
+        }
+        
         try {
             const res = await axios.post('facebook/list', data)
             facebookData.value = res.data
@@ -114,21 +122,22 @@ export const useFacebookStore = defineStore('facebook', () => {
         //     url: route.params.table,
         // }
 
-        const data = {}
+        let data = {}
 
         if (id) {
             if (id instanceof Array) {
-                data.profile_ids = id.join(',')
+                data.profile_ids = id.join()
                 fileName = 'profiles-selected.xlsx'
             } else {
                 data.profile_id = id
                 fileName = 'profiles-' + id + '.xlsx'
             }
-        }
+        }  
 
         const res = await axios.post('facebook/download', data, {
             responseType: 'blob',
         })
+        
         var fileURL = window.URL.createObjectURL(new Blob([res.data]))
         var fileLink = document.createElement('a')
         fileLink.href = fileURL
@@ -146,6 +155,7 @@ export const useFacebookStore = defineStore('facebook', () => {
         toggleHandMode,
         page,
         filterBy,
+        filterByStatus,
         selectedRegister,
         sortRegister,
         selectedSort,
