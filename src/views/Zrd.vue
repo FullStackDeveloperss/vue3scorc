@@ -7,13 +7,20 @@ import axios from 'axios'
 import { onBeforeMount, reactive } from 'vue'
 import { startWatch, setFields } from '@/helpers'
 import type { Fields } from '@/types/zrd'
+import { useToast } from 'primevue/usetoast'
 
+const toast = useToast()
 onBeforeMount(async () => {
     try {
         const res = await axios.post('setting/get', { code: 'zrd' })
         setFields(fields, res.data.fields)
     } catch (error) {
-        console.log(error)
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Ошибка загрузки данных',
+            life: 3000,
+        })
     }
     startWatch(fields, 'zrd')
 })

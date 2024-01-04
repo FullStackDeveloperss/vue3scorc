@@ -2,7 +2,7 @@ import axios from 'axios'
 import { ref } from 'vue'
 
 export function useFile() {
-    const downloadFile = async (fileName, options) => {
+    const downloadFile = async (fileName: string, options: any) => {
         await axios.post(options.url, options.data, {
             responseType: 'blob',
         }).then((response) => {
@@ -29,16 +29,16 @@ export function useFile() {
 
     }
 
-    const inputFile = ref()
+    const inputFile = ref<HTMLInputElement>()
     const uploadingProgress = ref(0)
     const loading = ref(false)
-    const uploadFile = async (url, options) => {
+    const uploadFile = async (url: string, options: any) => {
         const formData = new FormData()
 
         formData.append('file', options.file)
 
         if (options.formDataAdditional) {
-            options.formDataAdditional.forEach(item => {
+            options.formDataAdditional.forEach((item: any[]) => {
                 formData.append(item[0], item[1])
             })
         }
@@ -47,7 +47,7 @@ export function useFile() {
         axios.post(url, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             onUploadProgress: progressEvent => {
-                const { loaded, total } = progressEvent
+                const { loaded, total = 1 } = progressEvent
                 uploadingProgress.value = Math.round((loaded / total) * 100)
             },
         }).then((response) => {

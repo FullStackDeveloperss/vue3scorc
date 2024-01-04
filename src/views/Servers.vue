@@ -6,6 +6,7 @@ import Dropdown from 'primevue/dropdown'
 import { onBeforeMount, onMounted, reactive, ref } from 'vue'
 import axios from 'axios'
 import { setFields, startWatch } from '@/helpers/index.js'
+import { useToast } from 'primevue/usetoast'
 
 const selectedServer = ref<string>('')
 const server = ref([
@@ -22,12 +23,18 @@ const serversList = ref([
     },
 ])
 
+const toast = useToast()
 onBeforeMount(async () => {
     try {
         const list = await axios.post('/remote-server/list')
         serversList.value = list.data.servers
     } catch (error) {
-        console.log(error)
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Ошибка загрузки данных',
+            life: 3000,
+        })
     }
 })
 </script>

@@ -6,13 +6,21 @@ import axios from 'axios'
 import { reactive, onBeforeMount } from 'vue'
 import { startWatch, setFields } from '@/helpers'
 import type { Fields } from '@/types/public'
+import { useToast } from 'primevue/usetoast'
 
+const toast = useToast()
 onBeforeMount(async () => {
     try {
         const res = await axios.post('setting/get', { code: 'inviter_public' })
         setFields(fields, res.data.fields)
     } catch (error) {
         console.log(error)
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Ошибка загрузки данных',
+            life: 3000,
+        })
     }
     startWatch(fields, 'inviter_public')
 })

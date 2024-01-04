@@ -9,6 +9,9 @@ import type { Fields } from '@/types/farm'
 import axios from 'axios'
 import { onBeforeMount, ref, reactive, watch } from 'vue'
 import { startWatch, setFields } from '@/helpers'
+import { useToast } from 'primevue/usetoast'
+
+const toast = useToast()
 
 onBeforeMount(async () => {
     try {
@@ -17,6 +20,12 @@ onBeforeMount(async () => {
         selectedCaptcha.value = { name: res.data.fields.capthca_type }
     } catch (error) {
         console.log(error)
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Ошибка загрузки данных',
+            life: 3000,
+        })
     }
     startWatch(fields, 'general')
 })

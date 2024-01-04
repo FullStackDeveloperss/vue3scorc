@@ -12,6 +12,7 @@ import { useWindowSize } from "@vueuse/core";
 import axios from "axios";
 import Dropdown from "primevue/dropdown";
 import { onBeforeMount, ref } from "vue";
+import { useToast } from 'primevue/usetoast'
 
 const { width } = useWindowSize();
 
@@ -19,6 +20,8 @@ const dashboard = ref<Dashboard | null>(null);
 const dashboardProxy = ref<ProxyDashboard | null>(null)
 const selectedDate = ref<string>("");
 const dates = ref<Date[]>([{ name: "Сегодня" }]);
+
+const toast = useToast()
 
 const getDashboardInfo = async () => {
   try {
@@ -28,6 +31,12 @@ const getDashboardInfo = async () => {
     dashboardProxy.value = resProxy.data;
   } catch (error) {
     console.log(error);
+      toast.add({
+          severity: 'error',
+          summary: ``,
+          detail: 'Ошибка загрузки данных',
+          life: 3000,
+      })
   }
 };
 

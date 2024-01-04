@@ -12,6 +12,7 @@ import { useToast } from 'primevue/usetoast'
 import { storeToRefs } from 'pinia'
 import { useFacebookStore } from '@/stores/facebook'
 import Toast from 'primevue/toast'
+import type { IStatus } from '@/types/checkpoint'
 
 const facebookStore = useFacebookStore()
 const { filterByStatus } = storeToRefs(facebookStore)
@@ -26,7 +27,7 @@ onBeforeMount(async () => {
     }))
 })
 
-const statuses = ref([])
+const statuses = ref<IStatus[]>([])
 
 const selectedGeo = ref<string>('')
 const geo = ref([
@@ -58,8 +59,8 @@ const changeStatus = async () => {
 
     try {
         const res = await axios.post('facebook/mass-change-status', {
-            status_from: selectedNowStatus.value.value,
-            status_to: selectedNewStatus.value.value,
+            status_from: selectedNowStatus.value,
+            status_to: selectedNewStatus.value,
         })
 
         toast.add({

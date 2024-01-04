@@ -11,10 +11,11 @@ import Dropdown from 'primevue/dropdown'
 import Paginator from 'primevue/paginator'
 import { onMounted, watch } from 'vue'
 import debounce from 'lodash.debounce'
-import axios from 'axios'
+import axios, { type AxiosResponse } from 'axios'
 import { useToast } from 'primevue/usetoast'
 import Toast from 'primevue/toast'
 import { useFile } from '@/composables/file.js'
+import type { HTMLInputEvent } from '@/types/html'
 
 const facebookStore = useFacebookStore()
 const { facebookData, selectedRegister, sortRegister, selectedSort, sortSort, page } = storeToRefs(facebookStore)
@@ -46,33 +47,38 @@ watch(
 const toast = useToast()
 
 const { downloadFile, uploadFile, inputFile } = useFile()
-const uploaderHandler = (event) => {
-    uploadFile('facebook/upload', {
-        file: event.target.files[0],
-        onSuccess(response) {
-            toast.add({
-                severity: 'success',
-                summary: ``,
-                detail: response.data.message,
-            })
 
-            event.target.value = null
-            facebookStore.getFacebookData()
-        },
-        onError(error) {
-            toast.add({
-                severity: 'error',
-                summary: `Ошибка`,
-                detail: error.message,
-            })
-        },
-    })
+const uploaderHandler = (event: Event) => {
+    let files = (event as HTMLInputEvent).target.files
+    if (files?.length) {
+        uploadFile('facebook/upload', {
+            file: files[0],
+            onSuccess(response: AxiosResponse) {
+                toast.add({
+                    severity: 'success',
+                    summary: ``,
+                    detail: response.data.message,
+                });
+
+                (event as HTMLInputEvent).target.value = ''
+                facebookStore.getFacebookData()
+            },
+            onError(error: Error) {
+                toast.add({
+                    severity: 'error',
+                    summary: `Ошибка`,
+                    detail: error.message,
+                })
+            },
+        })
+    }
+
 }
 const downloadHandler = () => {
     downloadFile('profiles-fb.xlsx', {
         data: {},
         url: 'facebook/download',
-        onError(error) {
+        onError(error: Error) {
             toast.add({
                 severity: 'error',
                 summary: `Ошибка`,
@@ -190,7 +196,7 @@ const downloadHandler = () => {
                         alt="Загрузить"
                                 border="none"
                                 backgroundColor="#0067D5"
-                                @click="$refs.inputFile.click()" />
+                                @click="($refs.inputFile as HTMLDivElement).click()" />
                     <Toast />
                 </div>
             </div>

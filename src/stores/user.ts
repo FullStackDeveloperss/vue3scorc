@@ -54,7 +54,7 @@ export const useUserStore = defineStore(
 
         // TODO: username need only for document title, on change this method generate title remove username from this and ProfileData.vue
         const userName = ref<string | null>(null)
-        const setUserName = name => {
+        const setUserName = (name: string) => {
             userName.value = name
             localStorage.setItem('userName', name)
         }

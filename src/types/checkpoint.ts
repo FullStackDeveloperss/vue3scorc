@@ -7,3 +7,8 @@ export interface Fields {
     get_all_invalid_statuses: boolean
     get_statuses: any[]
 }
+
+export interface IStatus {
+    name: string,
+    value: string
+}

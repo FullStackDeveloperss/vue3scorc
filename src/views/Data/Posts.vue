@@ -2,7 +2,7 @@
 import AppLayout from '@/components/layout/AppLayout.vue'
 import { onBeforeMount, reactive } from 'vue'
 import { useRoute } from 'vue-router'
-import axios from 'axios'
+import axios, { type AxiosResponse } from 'axios'
 import { setFields } from '@/helpers'
 import type { SectionData } from '@/types/section'
 import Paginator from 'primevue/paginator'
@@ -10,6 +10,8 @@ import { useToast } from 'primevue/usetoast'
 import { useFile } from '@/composables/file'
 import ButtonIcon from '@/components/ui/ButtonIcon.vue'
 import Toast from 'primevue/toast'
+import { useFacebookStore } from '@/stores/facebook'
+import type { HTMLInputEvent } from '@/types/html'
 
 const route = useRoute()
 
@@ -19,6 +21,12 @@ const fetchData = async (options: any)  => {
         setFields(data, res.data)
     } catch (error) {
         console.log(error)
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Ошибка загрузки данных',
+            life: 3000,
+        })
     }
 }
 
@@ -54,7 +62,7 @@ const downloadHandler = () => {
             url: route.params.id
         },
         url: 'data/download',
-        onError(error) {
+        onError(error: Error) {
             toast.add({
                 severity: 'error',
                 summary: `Ошибка`,
@@ -64,31 +72,35 @@ const downloadHandler = () => {
     })
 }
 
-const uploaderHandler = (event) => {
-    uploadFile('facebook/upload', {
-        file: event.target.files[0],
-        formDataAdditional: [
-            ['section', 'job'],
-            ['url', route.params.id]
-        ],
-        onSuccess(response) {
-            toast.add({
-                severity: 'success',
-                summary: ``,
-                detail: response.data.message,
-            })
+const facebookStore = useFacebookStore()
+const uploaderHandler = (event: Event) => {
+    let files = (event as HTMLInputEvent).target.files
+    if (files?.length) {
+        uploadFile('facebook/upload', {
+            file: files[0],
+            formDataAdditional: [
+                ['section', 'job'],
+                ['url', route.params.id]
+            ],
+            onSuccess(response: AxiosResponse) {
+                toast.add({
+                    severity: 'success',
+                    summary: ``,
+                    detail: response.data.message,
+                });
 
-            event.target.value = null
-            facebookStore.getFacebookData()
-        },
-        onError(error) {
-            toast.add({
-                severity: 'error',
-                summary: `Ошибка`,
-                detail: error.message,
-            })
-        }
-    })
+                (event as HTMLInputEvent).target.value = ''
+                facebookStore.getFacebookData()
+            },
+            onError(error: Error) {
+                toast.add({
+                    severity: 'error',
+                    summary: `Ошибка`,
+                    detail: error.message,
+                })
+            }
+        })
+    }
 }
 
 const removeAllPosts = () => {
@@ -122,7 +134,7 @@ const removeAllPosts = () => {
                             tooltip
                             border="none"
                             backgroundColor="#0067D5"
-                            @click="$refs.inputFile.click()"
+                            @click="($refs.inputFile as HTMLDivElement).click()"
                 />
                 <ButtonIcon src="/icons/delete.svg"
                             alt="Удалить все"

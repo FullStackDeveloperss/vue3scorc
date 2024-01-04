@@ -1,8 +1,9 @@
-import type { Datum, Facebook } from '@/types/facebook'
+import type { Datum, Facebook, FacebookQuery } from '@/types/facebook'
 import axios from 'axios'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
+import type { IStatus } from '@/types/checkpoint'
 
 export const useFacebookStore = defineStore('facebook', () => {
     const facebookData = ref<Facebook | null>(null)
@@ -19,7 +20,7 @@ export const useFacebookStore = defineStore('facebook', () => {
         search_by_login_query: '',
     })
 
-    const filterByStatus = ref('')
+    const filterByStatus = ref<IStatus>()
 
     const page = ref(1)
     const sortOrder = ref<string>('')
@@ -41,13 +42,13 @@ export const useFacebookStore = defineStore('facebook', () => {
     ])
 
     const getFacebookData = async () => {
-        const data = {
+        let data: FacebookQuery = {
             page: page.value,
             per_page: selectedSort.value.value,
             filterBy: filterBy.value,
         }
 
-        if (filterByStatus.value?.value) {
+        if (filterByStatus.value) {
             data.status = filterByStatus.value.value
         }
 
@@ -61,7 +62,7 @@ export const useFacebookStore = defineStore('facebook', () => {
 
     const getFacebookDataBySort = async () => {
         if (selectedRegister !== null && sortOrder.value !== '') {
-            const data = {
+            const data: FacebookQuery = {
                 page: page.value,
                 per_page: selectedSort.value.value,
                 filterBy: filterBy.value,
@@ -69,7 +70,7 @@ export const useFacebookStore = defineStore('facebook', () => {
                 sort_order: sortOrder.value,
             }
 
-            if (filterByStatus.value?.value) {
+            if (filterByStatus.value) {
                 data.status = filterByStatus.value.value
             }
 
@@ -82,8 +83,11 @@ export const useFacebookStore = defineStore('facebook', () => {
         }
     }
 
-    const removeProfile = async (d: Datum) => {
-        const data = {}
+    const removeProfile = async (d: any) => {
+        const data: {
+            profile_ids?: string,
+            profile_id?: string | number,
+        } = {}
 
         if (d) {
             if (d instanceof Array) {
@@ -120,7 +124,7 @@ export const useFacebookStore = defineStore('facebook', () => {
         d.hand_mode = res.data.hand_mode
     }
 
-    const downloadFile = async (id: number | number[]) => {
+    const downloadFile = async (id: string | string[] | number) => {
         let fileName = 'profiles-fb.xlsx'
         // const route = useRoute()
         // const data = {
@@ -128,7 +132,7 @@ export const useFacebookStore = defineStore('facebook', () => {
         //     url: route.params.table,
         // }
 
-        let data = {}
+        let data: { profile_ids?: string, profile_id?: string | number,} = {}
 
         if (id) {
             if (id instanceof Array) {
@@ -167,6 +171,6 @@ export const useFacebookStore = defineStore('facebook', () => {
         sortSort,
         sortOrder,
         setActivityAll,
-        downloadFile,
+        downloadFile
     }
 })

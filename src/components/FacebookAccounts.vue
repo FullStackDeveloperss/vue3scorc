@@ -5,23 +5,21 @@ import type { Datum } from '@/types/facebook'
 import { useWindowSize } from '@vueuse/core'
 import Checkbox from 'primevue/checkbox'
 import { computed, ref } from 'vue'
-import { storeToRefs } from 'pinia'
 import ArrowDown from '@/components/icons/ArrowDown.vue'
 
 const facebookStore = useFacebookStore()
-const { downloadFile } = storeToRefs(facebookStore)
 
 const props = defineProps<{ data: Datum[] }>()
 
 const { width } = useWindowSize()
 
-const selected = ref([])
+const selected = ref<Number[]>([])
 const selectedAll = computed( {
     get() {
         return selected.value.length === props.data.length
     },
     set (value) {
-        const selectedId = []
+        const selectedId: Number[] = []
         if (value) {
             props.data.forEach( item => {
                 selectedId.push(item.id)
@@ -33,7 +31,7 @@ const selectedAll = computed( {
 })
 
 const downloadSelected = async () => {
-    await facebookStore.downloadFile(selected.value)
+    await facebookStore.downloadFile(selected.value.toString())
 }
 
 const removeSelected = async () => {

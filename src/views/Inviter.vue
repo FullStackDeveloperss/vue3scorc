@@ -7,6 +7,7 @@ import { reactive, onBeforeMount, watch } from 'vue'
 import axios from 'axios'
 import { startWatch, setFields } from '@/helpers'
 import type { Fields } from '@/types/inviter'
+import { useToast } from 'primevue/usetoast'
 
 const fields: Fields = reactive({
     inviter: '',
@@ -17,12 +18,20 @@ const fields: Fields = reactive({
     groups_for_parsing_target_audience: '',
 })
 
+const toast = useToast()
+
 onBeforeMount(async () => {
     try {
         const res = await axios.post('setting/get', { code: 'general' })
         setFields(fields, res.data.fields)
     } catch (error) {
         console.log(error)
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Ошибка загрузки данных',
+            life: 3000,
+        })
     }
     startWatch(fields, 'general')
 })

@@ -7,6 +7,7 @@ import axios from 'axios'
 import { setFields } from '@/helpers'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
+import { useToast } from 'primevue/usetoast'
 
 const isDark = useDark({
     valueDark: 'dark',
@@ -20,16 +21,26 @@ const dataLogin = ref({
 	email: '',
 })
 
+const toast = useToast()
+
 onBeforeMount(async () => {
     try {
         const res = await axios.post('profile/get')
         dataLogin.value = res.data
     } catch (error) {
         console.log(error)
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Ошибка загрузки данных',
+            life: 3000,
+        })
     }
 })
 
 const userStore = useUserStore()
+
+
 
 const sendingData = ref(false)
 const saveProfileSettings = async () => {
@@ -41,7 +52,12 @@ const saveProfileSettings = async () => {
         userStore.setUserName(dataLogin.value.name)
         document.title = dataLogin.value.name
     } catch (error) {
-        console.log(error)
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Ошибка загрузки данных',
+            life: 3000,
+        })
     }
     sendingData.value = false
 }

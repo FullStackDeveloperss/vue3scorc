@@ -7,6 +7,9 @@ import InputSwitch from 'primevue/inputswitch'
 import Slider from 'primevue/slider'
 import { onBeforeMount, reactive } from 'vue'
 import { startWatch, setFields } from '@/helpers'
+import { useToast } from 'primevue/usetoast'
+
+const toast = useToast()
 
 onBeforeMount(async () => {
     try {
@@ -14,6 +17,12 @@ onBeforeMount(async () => {
         setFields(field, res.data.fields)
     } catch (error) {
         console.log(error)
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Ошибка загрузки данных',
+            life: 3000,
+        })
     }
     startWatch(field, 'autoupload')
 })

@@ -3,13 +3,21 @@ import AppLayout from '@/components/layout/AppLayout.vue'
 import { onBeforeMount, ref } from 'vue'
 import axios from 'axios'
 import type { LinkItem } from '@/types/section'
+import { useToast } from 'primevue/usetoast'
 
+const toast = useToast()
 onBeforeMount(async () => {
     try {
         const res = await axios.post('data/section', { type: 'reg' })
         data.value = res.data
     } catch (error) {
         console.log(error)
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Ошибка загрузки данных',
+            life: 3000,
+        })
     }
 })
 

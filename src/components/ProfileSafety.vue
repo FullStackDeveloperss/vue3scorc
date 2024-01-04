@@ -5,6 +5,7 @@ import Password from 'primevue/password'
 import { useDark, useWindowSize } from '@vueuse/core'
 import { ref } from 'vue'
 import axios from 'axios'
+import { useToast } from 'primevue/usetoast'
 
 const isDark = useDark({
     valueDark: 'dark',
@@ -18,6 +19,8 @@ const safety = ref({
     password_confirmation: ''
 })
 
+const toast = useToast()
+
 const sendingData = ref(false)
 const saveNewPassword = async () => {
     sendingData.value = true
@@ -25,6 +28,12 @@ const saveNewPassword = async () => {
         const res = await axios.post('profile/set-password', safety.value)
     } catch (error) {
         console.log(error)
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Ошибка загрузки данных',
+            life: 3000,
+        })
     }
     sendingData.value = false
 }

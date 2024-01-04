@@ -25,6 +25,7 @@ export interface Datum {
   status: number;
   hand_mode: number;
   created_at: string;
+  showFullInfo?: boolean
 }
 
 interface Data {
@@ -44,4 +45,14 @@ interface Data {
   phone?: any;
   linksSelfy?: any;
   tokenMess?: any;
+}
+
+export interface FacebookQuery {
+  page: number,
+  per_page: number,
+  filterBy?: any,
+  sort?: string,
+  sort_order?: string,
+  status?: string,
+
 }

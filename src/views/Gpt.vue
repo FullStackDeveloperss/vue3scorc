@@ -7,6 +7,9 @@ import axios from 'axios'
 import { reactive, onBeforeMount } from 'vue'
 import { startWatch, setFields } from '@/helpers'
 import type { Fields } from '@/types/gpt'
+import { useToast } from 'primevue/usetoast'
+
+const toast = useToast()
 
 onBeforeMount(async () => {
     try {
@@ -14,6 +17,12 @@ onBeforeMount(async () => {
         setFields(fields, res.data.fields)
     } catch (error) {
         console.log(error)
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Ошибка загрузки данных',
+            life: 3000,
+        })
     }
     startWatch(fields, 'chat-gpt')
 })

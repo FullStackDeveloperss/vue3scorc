@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/components/layout/AppLayout.vue'
-import axios from 'axios'
+import axios, { type AxiosResponse } from 'axios'
 import { computed, onBeforeMount, reactive, ref } from 'vue'
 import { setFields, startWatch } from '@/helpers'
 import type { Fields } from '@/types/proxy'
@@ -45,6 +45,12 @@ const getDataFromApi = async () => {
         setFields(proxyList, list.data)
     } catch (error) {
         console.log(error)
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Ошибка загрузки данных',
+            life: 3000,
+        })
     }
 }
 
@@ -63,7 +69,7 @@ const downloadHandler = () => {
     downloadFile('proxies.csv', {
         data: { valid: downloadValid ? 'valid' : 'all' },
         url: 'data/proxy/download',
-        onError(error) {
+        onError(error: Error) {
             toast.add({
                 severity: 'error',
                 summary: `Ошибка`,
@@ -81,7 +87,7 @@ const removeAllProxy = async () => {
         toast.add({
             severity: 'error',
             summary: `Ошибка`,
-            detail: error.message,
+            detail: 'Не удалось удалить',
         })
     }
 }
@@ -100,7 +106,7 @@ const uploadHandler = async () => {
 
     uploadFile('proxy/upload', {
         file: file.value,
-        async onSuccess(response) {
+        async onSuccess(response: AxiosResponse) {
             const { proxies, rows, message } = response.data
 
             toast.add({
@@ -112,7 +118,7 @@ const uploadHandler = async () => {
 
             await getDataFromApi()
         },
-        onError(error) {
+        onError(error: Error) {
             toast.add({
                 severity: 'error',
                 summary: `Ошибка`,
@@ -120,19 +126,27 @@ const uploadHandler = async () => {
             })
         },
         callback() {
-            inputFile.value.value = null
+            if (inputFile.value) {
+                inputFile.value.value = ''
+            }
+
             file.value = null
         }
     })
 }
 
-const file = ref(null)
+const file = ref<File | null>(null)
 
 const selectFile = () => {
-    file.value = inputFile.value.files[0]
+    const files = inputFile.value?.files
+    if (files?.length) {
+        file.value = files[0]
+    }
 }
 const cancelFile = () => {
-    inputFile.value.value = null
+    if (inputFile.value) {
+        inputFile.value.value = ''
+    }
 }
 </script>
 
@@ -189,13 +203,13 @@ const cancelFile = () => {
                 </div>
                 <div class="upload">
                     <div class="upload__head">
-                        <input type='file' :value="fileValue" accept=".txt" hidden @change="selectFile" ref="inputFile" />
+                        <input type='file' accept=".txt" hidden @change="selectFile" ref="inputFile" />
                         <ButtonIcon src="/icons/upload.svg"
                                     alt="Скачать"
                                     border="none"
                                     backgroundColor="#0067D5"
-                                    @click="$refs.inputFile?.click()" />
-                        <span v-if="file" class="upload__file-name">{{ file.name }}</span>
+                                    @click="($refs.inputFile as HTMLDivElement).click()" />
+                        <span v-if="file" class="upload__file-name">{{ file?.name }}</span>
                         <StatusError v-if="file" @click="cancelFile" />
                     </div>
                     <div v-if="file" class="upload__progress"></div>

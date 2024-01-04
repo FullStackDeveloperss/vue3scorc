@@ -8,14 +8,21 @@ import axios from 'axios'
 import { setFields, startWatch } from '@/helpers'
 import type { Fields } from '@/types/sms'
 import MultiSelect from 'primevue/multiselect'
+import { useToast } from 'primevue/usetoast'
 
-
+const toast = useToast()
 onBeforeMount(async () => {
     try {
         const res = await axios.post('setting/get', { code: 'sms-services' })
         setFields(fields, res.data.fields)
     } catch (error) {
         console.log(error)
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Ошибка загрузки данных',
+            life: 3000,
+        })
     }
     startWatch(fields, 'sms-services')
 })
@@ -232,8 +239,8 @@ const countries = [
     { country: 'Западная Сахара', code: '192' },
 ]
 
-const unselectCountry = country => {
-    selectedCountry.value = selectedCountry.value.filter(item => item.code !== country.code)
+const unselectCountry = (country: { code: String, country: String } | undefined) => {
+    selectedCountry.value = selectedCountry.value.filter(item => item?.code !== country?.code)
 }
 
 </script>
@@ -290,7 +297,7 @@ const unselectCountry = country => {
                         </MultiSelect>
                         <div class="custom-multiselect__label-list">
                             <div class="custom-multiselect__token" v-for="item of selectedCountry">
-                                <div class="custom-multiselect__selected-value">{{ item.country }}</div>
+                                <div class="custom-multiselect__selected-value">{{ item?.country }}</div>
                                 <div class="custom-multiselect__selected-remove" @click="unselectCountry(item)">
                                     <svg width="14"
                                          height="14"

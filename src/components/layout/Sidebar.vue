@@ -25,6 +25,7 @@ import axios from 'axios'
 import type { Dashboard } from '@/types/dashboard'
 import { OverlayScrollbarsComponent } from "overlayscrollbars-vue";
 import 'overlayscrollbars/overlayscrollbars.css';
+import { useToast } from 'primevue/usetoast'
 
 const isDark = useDark({
     valueDark: 'dark',
@@ -33,12 +34,20 @@ const isDark = useDark({
 
 const dashboard = ref<Dashboard | null>(null)
 
+const toast = useToast()
+
 const getDashboardInfo = async () => {
     try {
         const res = await axios.post('stats/info')
         dashboard.value = res.data
     } catch (error) {
         console.log(error)
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Ошибка загрузки данных',
+            life: 3000,
+        })
     }
 }
 

@@ -6,8 +6,11 @@ import Slider from 'primevue/slider'
 import axios from 'axios'
 import { computed, onBeforeMount, reactive, ref, watch } from 'vue'
 import { setFields, startWatch } from '@/helpers'
-import type { Fields } from '../types/checkpoint'
+import type { Fields, IStatus } from '../types/checkpoint'
 import MultiSelect from 'primevue/multiselect'
+import { useToast } from 'primevue/usetoast'
+
+const toast = useToast()
 
 onBeforeMount(async () => {
     try {
@@ -22,6 +25,12 @@ onBeforeMount(async () => {
         setFields(fields, res.data.fields)
     } catch (error) {
         console.log(error)
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Ошибка загрузки данных',
+            life: 3000,
+        })
     }
     startWatch(fields, 'checkpoint')
 })
@@ -38,16 +47,16 @@ const fields: Fields = reactive({
 // const selectedCheckpoint = ref<[{ name: string; value: string }]>(adaptedSelectedCheckpoints.value)
 const selectedCheckpoint = computed({
     get() {
-        return fields.get_statuses.map(item => {
-            return checkpoint.value.find( status => status.value === item)
-        });
+        return fields.get_statuses.map((item) => {
+            return (checkpoint.value.find( (status: IStatus) => status.value === item))
+        }) as IStatus[]
     },
     set(val) {
         fields.get_statuses = val.map(item => item?.value);
     }
 })
-const checkpoint = ref([])
-const unselectStatus = status => {
+const checkpoint = ref<IStatus[]>([])
+const unselectStatus = (status: IStatus) => {
     selectedCheckpoint.value = selectedCheckpoint.value.filter(item => item?.value !== status?.value)
 }
 
