@@ -62,12 +62,16 @@ const { isCloseSidebar } = storeToRefs(rootStore)
 <template>
     <OverlayScrollbarsComponent class="sidebar" :class="{ 'sidebar__close': isCloseSidebar }">
             <div class="sidebar__logo" v-if="!isDark">
-                <img v-if="!isCloseSidebar" src="/images/logo-dashboard.png" width="228" height="46">
-                <img v-else src="/images/logo-dashboard-close.png" width="46" height="46">
+                <RouterLink to="/">
+                    <img v-if="!isCloseSidebar" src="/images/logo-dashboard.png" width="228" height="46">
+                    <img v-else src="/images/logo-dashboard-close.png" width="46" height="46">
+                </RouterLink>
             </div>
             <div class="sidebar__logo" v-else>
-                <img v-if="!isCloseSidebar" src="/images/logo-dashboard-dark.png" width="228" height="46">
-                <img v-else src="/images/logo-dashboard-close.png" width="46" height="46">
+                <RouterLink to="/">
+                    <img v-if="!isCloseSidebar" src="/images/logo-dashboard-dark.png" width="228" height="46">
+                    <img v-else src="/images/logo-dashboard-close.png" width="46" height="46">
+                </RouterLink>
             </div>
             <nav class="sidebar__main">
                 <ul class="sidebar__main-list sidebar__list">
@@ -342,6 +346,11 @@ const { isCloseSidebar } = storeToRefs(rootStore)
 
         @media only screen and (max-width: 743px) and (min-width: 320px) {
             display: none;
+        }
+
+        .router-link-exact-active {
+            background: none;
+            border-radius: 0;
         }
     }
 
