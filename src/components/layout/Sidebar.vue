@@ -94,12 +94,12 @@ const { isCloseSidebar } = storeToRefs(rootStore)
                             </div>
                         </RouterLink>
                     </li>
-                    <li class="sidebar__main-item sidebar__item">
-                        <RouterLink to="/autofill" class="sidebar__main-link sidebar__link">
-                            <Autofill class="sidebar__main-icon sidebar__icon" />
-                            <span class="sidebar__main-text sidebar__text">Автозалив</span>
-                        </RouterLink>
-                    </li>
+<!--                    <li class="sidebar__main-item sidebar__item">-->
+<!--                        <RouterLink to="/autofill" class="sidebar__main-link sidebar__link">-->
+<!--                            <Autofill class="sidebar__main-icon sidebar__icon" />-->
+<!--                            <span class="sidebar__main-text sidebar__text">Автозалив</span>-->
+<!--                        </RouterLink>-->
+<!--                    </li>-->
                 </ul>
             </nav>
             <nav class="sidebar__work">

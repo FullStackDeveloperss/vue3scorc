@@ -43,11 +43,11 @@ const router = createRouter({
 			name: 'facebook',
 			component: () => import('@/views/Facebook.vue'),
 		},
-		{
-			path: '/autofill',
-			name: 'autofill',
-			component: () => import('@/views/Autofill.vue'),
-		},
+		// {
+		// 	path: '/autofill',
+		// 	name: 'autofill',
+		// 	component: () => import('@/views/Autofill.vue'),
+		// },
 		{
 			path: '/servers',
 			name: 'servers',
