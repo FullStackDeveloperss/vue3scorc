@@ -42,7 +42,25 @@ const getDashboardInfo = async () => {
 
 setInterval(() => getDashboardInfo(), 10000);
 
-onBeforeMount(getDashboardInfo);
+const getKeitaroData = async () => {
+    try {
+        // const res = await axios.post("");
+        keitaroData.value = false
+    } catch (error) {
+        console.log(error);
+        toast.add({
+            severity: 'error',
+            summary: ``,
+            detail: 'Ошибка загрузки данных',
+            life: 3000,
+        })
+    }
+}
+onBeforeMount(() => {
+    getDashboardInfo()
+    getKeitaroData()
+});
+const keitaroData = ref()
 </script>
 
 <template>
@@ -65,7 +83,7 @@ onBeforeMount(getDashboardInfo);
         }"
       />
     </div>
-<!--    <DashboardStatisticMain />-->
+    <DashboardStatisticMain v-if="keitaroData"/>
     <div class="dashboard__content">
       <DashboardCard
         src="/icons/all-proxy.svg"
