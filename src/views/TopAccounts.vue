@@ -132,8 +132,8 @@ const countOptions = ref([
 
     &__order {
         position: absolute;
-        top: 16px;
-        right: 16px;
+        top: 13px;
+        right: 11px;
     }
 
     &__order-icon {
@@ -155,7 +155,7 @@ const countOptions = ref([
     }
 
     &__data {
-        padding: 10px 12px 20px;
+        padding: 13px 12px 20px;
         display: flex;
         flex-direction: column;
         gap: 4px;
@@ -183,6 +183,15 @@ const countOptions = ref([
         font-weight: 700;
         line-height: normal;
     }
+
+    &__info-icon {
+        width: 14px;
+        height: 14px;
+
+        svg {
+            max-width: 100%;
+        }
+    }
 }
 @media only screen and (min-width: 560px) {
     .account {
@@ -201,7 +210,7 @@ const countOptions = ref([
                 }
 
                 .account__data {
-                    padding: 10px 16px 25px;
+                    padding: 10px 16px 27px;
                     gap: 10px;
                 }
 
@@ -215,11 +224,18 @@ const countOptions = ref([
                 .account__info {
                     gap: 7px;
                 }
+
                 .account__info-value {
                     font-size: 15px;
                     font-weight: 500;
                     line-height: 21px;
                     letter-spacing: 0.2px;
+                    font-family: "Inter";
+                }
+
+                .account__info-icon {
+                    width: 20px;
+                    height: 20px;
                 }
 
             }
@@ -253,6 +269,10 @@ const countOptions = ref([
 
 @media only screen and (max-width: 560px) {
     .account {
+        &__list {
+            gap: 15px;
+        }
+
         &__item {
             width: 100%;
         }
@@ -276,6 +296,11 @@ const countOptions = ref([
 
         &__info {
             gap: 7px;
+        }
+
+        &__info-icon {
+            width: 20px;
+            height: 20px;
         }
 
         &__info-value {
