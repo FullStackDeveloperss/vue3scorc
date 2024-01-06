@@ -156,7 +156,15 @@ const removeAllPosts = () => {
                 </thead>
                 <tbody>
                 <tr class="table__row" v-for="row of data.data">
-                    <td class="table__cell" v-for="cell of row">{{ cell }}</td>
+                    <td class="table__cell" v-for="cell of row">
+                        {{   }}
+                        <template v-if="typeof cell === 'string' && cell.includes('http')">
+                            <a :href="cell" target="_blank">{{ cell }}</a>
+                        </template>
+                        <template v-else>
+                            {{ cell }}
+                        </template>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -203,7 +211,6 @@ const removeAllPosts = () => {
     &__row {
         &:hover {
             background: #f5f6f8;
-            cursor: pointer;
         }
     }
 
@@ -224,6 +231,10 @@ const removeAllPosts = () => {
 
         &:first-child {
             width: 150px;
+        }
+
+        a:hover {
+            color: rgb(0, 103, 213);
         }
     }
 }
