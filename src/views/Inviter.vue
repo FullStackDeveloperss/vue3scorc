@@ -3,7 +3,7 @@ import AppLayout from '@/components/layout/AppLayout.vue'
 import Textarea from '@/components/ui/Textarea.vue'
 import InputSwitch from 'primevue/inputswitch'
 import Slider from 'primevue/slider'
-import { reactive, onBeforeMount, watch } from 'vue'
+import { reactive, onBeforeMount, watch, ref } from 'vue'
 import axios from 'axios'
 import { startWatch, setFields } from '@/helpers'
 import type { Fields } from '@/types/inviter'
@@ -42,6 +42,7 @@ onBeforeMount(async () => {
 // const blackList = ref<boolean>(false)
 // const geo = ref<string>('')
 // const group = ref<string>('')
+const allFriends = ref(false)
 </script>
 
 <template>
@@ -64,6 +65,10 @@ onBeforeMount(async () => {
                 <div class="inviter__item inviter__item_reverse">
                     <InputSwitch v-model="fields.check_black_list_names" />
                     <span class="inviter__text">Проверять Black list имен</span>
+                </div>
+                <div class="inviter__item inviter__item_reverse">
+                    <InputSwitch v-model="allFriends" />
+                    <span class="inviter__text">Выпарсивать вообще всех друзей</span>
                 </div>
                 <div class="inviter__item">
                     <span class="inviter__text">Гео</span>
