@@ -47,7 +47,7 @@ const fields: Fields = reactive({
 // const selectedCheckpoint = ref<[{ name: string; value: string }]>(adaptedSelectedCheckpoints.value)
 const selectedCheckpoint = computed({
     get() {
-        return fields.get_statuses.map((item) => {
+        return fields.get_statuses.filter(item => checkpoint.value.find(status => item === status.value)).map((item) => {
             return (checkpoint.value.find( (status: IStatus) => status.value === item))
         }) as IStatus[]
     },
