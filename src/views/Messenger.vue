@@ -83,10 +83,10 @@ const fields: Fields = reactive({
                     <InputSwitch v-model="fields.write_messages_first" />
                     <span class="messenger__text">Писать сообщения первым</span>
                 </div>
-                <div class="messenger__item messenger__item_reverse" v-if="fields.messenger === true">
-                    <InputSwitch v-model="fields.dialog_flow" />
-                    <span class="messenger__text">DialogFlow</span>
-                </div>
+<!--                <div class="messenger__item messenger__item_reverse" v-if="fields.messenger === true">-->
+<!--                    <InputSwitch v-model="fields.dialog_flow" />-->
+<!--                    <span class="messenger__text">DialogFlow</span>-->
+<!--                </div>-->
                 <div class="messenger__item" v-if="fields.dialog_flow === true">
                     <span class="messenger__text">DialogFlow API key</span>
                     <InputText v-model:input="fields.dialog_flow_api_key" type="text" />
