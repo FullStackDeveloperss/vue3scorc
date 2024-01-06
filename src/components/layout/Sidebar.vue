@@ -26,6 +26,7 @@ import type { Dashboard } from '@/types/dashboard'
 import { OverlayScrollbarsComponent } from "overlayscrollbars-vue";
 import 'overlayscrollbars/overlayscrollbars.css';
 import { useToast } from 'primevue/usetoast'
+import TopAccounts from '@/components/icons/TopAccounts.vue'
 
 const isDark = useDark({
     valueDark: 'dark',
@@ -104,6 +105,12 @@ const { isCloseSidebar } = storeToRefs(rootStore)
 <!--                            <span class="sidebar__main-text sidebar__text">Автозалив</span>-->
 <!--                        </RouterLink>-->
 <!--                    </li>-->
+                    <li class="sidebar__main-item sidebar__item">
+                        <RouterLink to="/top-accounts" class="sidebar__main-link sidebar__link">
+                            <TopAccounts class="sidebar__main-icon sidebar__icon" />
+                            <span class="sidebar__main-text sidebar__text">Топ аккаунты</span>
+                        </RouterLink>
+                    </li>
                 </ul>
             </nav>
             <nav class="sidebar__work">
